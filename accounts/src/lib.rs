@@ -17,7 +17,7 @@ extern crate serde_derive;
 
 
 
-pub mod graphql_module;
+pub mod graphql;
 pub mod server;
 pub mod db;
 pub mod schema;
