@@ -1,5 +1,8 @@
 [workspace]
 members = [
-    "backend", 
+    "accounts",
+    "inventory", 
+    "products", 
+    "reviews", 
     "frontend",
 ]
