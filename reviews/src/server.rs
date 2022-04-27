@@ -6,7 +6,7 @@ use async_graphql::{
     EmptyMutation, EmptySubscription, Schema,
 };
 use async_graphql_actix_web::{GraphQLRequest, GraphQLResponse};
-use crate::graphql_module::context::{graphql, graphql_playground, create_schema, run_migrations};
+use crate::graphql::config::{graphql, graphql_playground, create_schema, run_migrations, configure_service};
 use crate::db::{DatabaseKind, establish_connection};
 
 
@@ -16,15 +16,17 @@ pub async fn new_server(port: u32) -> std::io::Result<()> {
     let db_pool = establish_connection(DatabaseKind::Example);
     run_migrations(&db_pool);
     let schema = web::Data::new(create_schema(db_pool));
-
-    log::info!("starting HTTP server on port 8080");
-    log::info!("GraphiQL playground: http://localhost:8080/graphiql");
-
+    
+    
+    log::info!("{}", &schema.sdl());
+    log::info!("🚀 Starting HTTP server on port {} ", port);
+    log::info!("📭 GraphiQL playground: http://localhost:{}/graphiql", port);
+    log::info!("📢 Query at https://studio.apollographql.com/dev");
+    
     HttpServer::new(move || {
         App::new()
             .app_data(schema.clone())
-            .service(graphql)
-            .service(graphql_playground)
+            .configure(configure_service)
             .wrap(Cors::permissive())
             .wrap(Logger::default())
     })
