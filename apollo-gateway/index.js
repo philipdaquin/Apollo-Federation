@@ -21,9 +21,9 @@ const gateway = new ApolloGateway({
     supergraphSdl: new IntrospectAndCompose({
         subgraphs: [
             { name: 'accounts', url: 'http://localhost:4001 '},
-            { name: 'products', url: 'http://localhost:8082 '},
-            { name: 'reviews', url: 'http://localhost:8081 '},
-            { name: 'inventory', url: 'http://localhost:8081 '},
+            { name: 'products', url: 'http://localhost:4002 '},
+            { name: 'reviews', url: 'http://localhost:4003 '},
+            { name: 'inventory', url: 'http://localhost:4004 '},
         ],
         buildService({name, url}) {
             return new AuthenticatedDataSource({url});
