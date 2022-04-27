@@ -37,7 +37,7 @@ impl UserQuery {
     /// Resolver reference: the @key directive effectively tells the gateway, 
     /// This subgraph can resolve an instance of this entity if you provide its primary key 
     #[graphql(entity)]
-    async fn find_user_by_id(&self, ctx: &Context<'_>, id: ID) -> Option<UserType> { 
+    pub async fn find_user_by_id(&self, ctx: &Context<'_>, id: ID) -> Option<UserType> { 
         let id = id.parse::<i32>().expect("Failed To Parse from String");
         resolver::get_user_by_id(id, &get_conn_from_ctx(ctx))
             .ok()
