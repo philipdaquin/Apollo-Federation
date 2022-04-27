@@ -7,32 +7,36 @@ use crate::graphql::config::get_conn_from_ctx;
 pub struct ReviewType { 
     pub id: ID,
     pub body: String,
-    pub author: User,
-    pub product: Product 
+    pub author: UserType,
+    pub product: ProductType 
 }
 
-
-pub struct User { 
+pub struct UserType { 
     /// external
     pub id: ID
 }
 #[Object(extends)]
-impl User { 
+impl UserType { 
     #[graphql(external)]
     async fn user_id(&self) -> &ID { 
         &self.id
     }
 
-
+    async fn reviews(&self, ctx: &Context<'_>, id: ID) -> Vec<ReviewType> { 
+        let id = id.parse::<i32>().expect("");
+        resolver::get_reviews_by_user(id, &get_conn_from_ctx(ctx))
+            .expect("")
+            .iter()
+            .map(|x| ReviewType::from(x))
+            .collect()
+    }
 }
-
-
-pub struct Product { 
+pub struct ProductType { 
     /// External
     pub id: ID
 }
 #[Object(extends)]
-impl Product { 
+impl ProductType { 
     #[graphql(external)]
     async fn product_id(&self) -> &ID { 
         &self.id
@@ -50,17 +54,17 @@ impl Product {
 
 
 #[derive(Default)]
-struct QueryReviews;
+pub struct QueryReviews;
 #[Object]
 impl QueryReviews  {
     ///  Insert reference resolvers 
     ///  entities
     #[graphql(entity)]
-    async fn find_product_id(&self, id: ID) -> Product { 
-        Product { id }
+    async fn find_product_id(&self, id: ID) -> ProductType { 
+        ProductType { id }
     } 
     #[graphql(entity)]
-    async fn find_user_by_id(&self, id: ID) -> User { 
-        User { id }
+    async fn find_user_by_id(&self, id: ID) -> UserType { 
+        UserType { id }
     }
 }

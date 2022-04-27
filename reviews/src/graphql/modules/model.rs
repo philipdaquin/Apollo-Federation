@@ -1,5 +1,5 @@
 use crate::schema::review;
-use super::schema::{ReviewType, User, Product};
+use super::schema::{ReviewType, UserType, ProductType};
 use async_graphql::*;
 #[derive(Debug, Clone, PartialEq, Identifiable, Queryable)]
 #[table_name = "review"]
@@ -15,20 +15,20 @@ impl From<&Review> for ReviewType {
         ReviewType { 
             id: g.id.into(),
             body: g.body.clone(),
-            author: User::new(g.author_id.clone()),
-            product: Product::new(g.product_id.clone()),
+            author: UserType::new(g.author_id.clone()),
+            product: ProductType::new(g.product_id.clone()),
         }
     }
 }
 
-impl User { 
+impl UserType { 
     fn new(id: i32) -> Self { 
         Self { 
             id: id.into()
         }
     }
 }
-impl Product { 
+impl ProductType { 
     fn new(id: i32) -> Self { 
         Self { 
             id: id.into()

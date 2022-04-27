@@ -35,13 +35,23 @@ impl QueryProducts {
     /// Reference Resolver 
     #[graphql(entity)]
     pub async fn find_product_by_id(&self, ctx: &Context<'_>, id: ID) -> Option<ProductType> { 
-        let id = id.parse::<i32>().expect("");
-        resolver::get_product_by_id(id, &get_conn_from_ctx(ctx))
-            .ok()
-            .map(|f| ProductType::from(&f))
+        find_product_by_id_internal(ctx, id)
     }
-
+    pub async fn shipping_estimate(&self, ctx: &Context<'_>, id: ID) -> Option<i32> { 
+        let ProductType { 
+            id, name, price, weight
+        }  = find_product_by_id_internal(ctx, id).unwrap(); 
+        price
+    } 
 }
+
+fn find_product_by_id_internal(ctx: &Context<'_>, id: ID) -> Option<ProductType> { 
+    let id = id.parse::<i32>().expect("");
+    resolver::get_product_by_id(id, &get_conn_from_ctx(ctx))
+        .ok()
+        .map(|f| ProductType::from(&f))
+}
+
 
 impl From<&Product> for ProductType { 
     fn from(f: &Product) -> Self {
