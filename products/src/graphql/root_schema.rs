@@ -1,9 +1,10 @@
 use async_graphql::{EmptySubscription, 
     MergedObject, Schema, SchemaBuilder, EmptyMutation};
+    use super::modules::schema::QueryProducts;
 
 
 #[derive(MergedObject, Default)]
-pub struct Query;
+pub struct Query(QueryProducts);
 
 #[derive(MergedObject, Default)]
 pub struct Mutation;
