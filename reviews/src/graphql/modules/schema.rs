@@ -42,7 +42,7 @@ impl Product {
         resolver::get_reviews_by_product(id, &get_conn_from_ctx(ctx))
             .expect("")
             .iter()
-            .map(|x| ReviewType::from(&f))
+            .map(|x| ReviewType::from(x))
             .collect()
     }
 }
