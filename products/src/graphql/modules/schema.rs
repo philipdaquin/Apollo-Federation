@@ -1,3 +1,5 @@
+use serde::{Serialize, Deserialize};
+
 
 use {
     super::resolver::{get_all_products, get_product_by_id, self},
@@ -11,7 +13,7 @@ use {
 pub struct QueryProducts;
 
 ///  The Price Type in our System 
-#[derive(SimpleObject)]
+#[derive(Serialize, Deserialize, SimpleObject)]
 pub struct ProductType { 
     pub id: ID,
     pub name: String, 
@@ -37,11 +39,13 @@ impl QueryProducts {
     pub async fn find_product_by_id(&self, ctx: &Context<'_>, id: ID) -> Option<ProductType> { 
         find_product_by_id_internal(ctx, id)
     }
+    #[graphql(name = "getShippingEstimate")]
     pub async fn shipping_estimate(&self, ctx: &Context<'_>, id: ID) -> Option<i32> { 
         let ProductType { 
             id, name, price, weight
         }  = find_product_by_id_internal(ctx, id).unwrap(); 
-        price
+        Some(price.unwrap_or_default() * weight.unwrap_or_default())
+       
     } 
 }
 
