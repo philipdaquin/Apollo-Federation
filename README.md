@@ -5,7 +5,7 @@
 - Products
 - Inventory 
 - Reviews 
-### Techstack 
+## Techstack 
 - Yew/ Web Assembly 
 - Apollo Gateway
 - Async Graphql 
