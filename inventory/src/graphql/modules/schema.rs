@@ -23,12 +23,18 @@ impl ProductType {
         &self.id
     }
     async fn shipping_estimate(&self, ctx: &Context<'_>) -> Option<i32> { 
-        let inventory = get_inventory_by_id_internally(self.id.clone(), ctx);
-        if inventory.is_some() { 
-            return inventory.unwrap().price
+        if let Some(inventory) = get_inventory_by_id_internally(self.id.clone(), ctx) { 
+            if inventory.price.unwrap_or_default() > 1000 {
+                return Some(0)
+            } else { 
+                return inventory.weight
+                    .unwrap_or_default()
+                    .checked_mul(0.5 as i32)
+            } 
         } else { 
             None
         }
+
     }
     async fn get_by_product_id(&self, ctx: &Context<'_>) -> Option<InventoryType> { 
         get_inventory_by_id_internally(self.id.clone(), ctx)
@@ -42,7 +48,7 @@ fn get_inventory_by_id_internally(id: ID, ctx: &Context<'_>) -> Option<Inventory
 }
 
 #[derive(Default)]
-struct QueryInventory;
+pub struct QueryInventory;
 
 #[Object]
 impl QueryInventory { 
