@@ -1,0 +1,22 @@
+version: '3.9'
+services:
+  accounts:
+    build:
+      context:  .
+      dockerfile: .accounts/Dockerfile
+  products:
+    build:
+      context:  .
+      dockerfile: .products/Dockerfile
+  reviews:
+    build:
+      context:  .
+      dockerfile: .reviews/Dockerfile
+  inventory:
+    build:
+      context:  .
+      dockerfile: .inventory/Dockerfile
+  apollo-gateway: 
+    build:
+      context: .
+      dockerfile: .apollo-gateway/Dockerfile

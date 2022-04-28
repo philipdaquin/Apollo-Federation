@@ -1,0 +1,35 @@
+version: '3.9'
+services:
+  # Accounts
+  accounts: 
+    image: federation:accounts
+    container_name: accounts
+    restart: always
+    depends_on: 
+      - accounts-db 
+    environment:
+      - name=value
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:4001/"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    ports:
+      - 4001:4001
+  accounts-db: 
+    image: postgres:latest
+    container_name: accounts-db
+    restart: always
+    environment: 
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+  # Products
+  # Reviews 
+  # Inventory 
+  # Frontend
