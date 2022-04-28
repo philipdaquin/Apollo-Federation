@@ -1,4 +1,4 @@
-# Apollo-Federation in Rust
+# Apollo-Federation in Rust 🚀
 - Note: No Mutations (yet)
 ## Main Services
 - Accounts
