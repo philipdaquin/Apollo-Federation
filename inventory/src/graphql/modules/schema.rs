@@ -1,7 +1,7 @@
 use async_graphql::*;
 use async_graphql_actix_web::*;
 use super::resolver::{get_all_inventory, get_by_product_id, self};
-use crate::graphql::config::get_conn_from_ctx;
+use crate::{graphql::config::get_conn_from_ctx, schema::inventory};
 
 #[derive(SimpleObject)]
 pub struct InventoryType { 
@@ -22,10 +22,23 @@ impl ProductType {
     pub async fn id(&self) -> &ID {
         &self.id
     }
-   
     async fn shipping_estimate(&self, ctx: &Context<'_>) -> Option<i32> { 
-        todo!()
+        let inventory = get_inventory_by_id_internally(self.id.clone(), ctx);
+        if inventory.is_some() { 
+            return inventory.unwrap().price
+        } else { 
+            None
+        }
     }
+    async fn get_by_product_id(&self, ctx: &Context<'_>) -> Option<InventoryType> { 
+        get_inventory_by_id_internally(self.id.clone(), ctx)
+    }
+}
+fn get_inventory_by_id_internally(id: ID, ctx: &Context<'_>) -> Option<InventoryType> { 
+    let id = id.parse::<i32>().expect("Unable to get Product Id");
+    resolver::get_by_product_id(id, &get_conn_from_ctx(ctx))
+        .ok()
+        .map(|x| InventoryType::from(&x))
 }
 
 #[derive(Default)]
@@ -33,8 +46,6 @@ struct QueryInventory;
 
 #[Object]
 impl QueryInventory { 
-    /// Resolver References 
-    /// Product Id 
     #[graphql(entity)]
     async fn find_product_id(&self, #[graphql(key)] id: ID ) -> ProductType { 
         ProductType { id }
