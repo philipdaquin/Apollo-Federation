@@ -1,11 +1,11 @@
-# Apollo-Federation in Rust
+# Apollo-Federation in Rust 🚀
 - Note: No Mutations (yet)
 ## Main Services
 - Accounts
 - Products
 - Inventory 
 - Reviews 
-### Techstack 
+## Techstack 
 - Yew/ Web Assembly 
 - Apollo Gateway
 - Async Graphql 
@@ -14,6 +14,8 @@
 - Diesel 
 - Postgres SQL 
 - Docker
-
+## Monitoring Tools 
+- Grafana 
+- Prometheus 
 
 
