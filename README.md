@@ -14,6 +14,8 @@
 - Diesel 
 - Postgres SQL 
 - Docker
-
+## Monitoring Tools 
+- Grafana 
+- Prometheus 
 
 
