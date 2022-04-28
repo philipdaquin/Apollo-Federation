@@ -29,6 +29,9 @@ impl UserQuery {
             .map(UserType::from)
             .collect()
     }
+    pub async fn get_user_by_id(&self, ctx: &Context<'_>, id: ID) -> Option<UserType> { 
+        find_user_internally(ctx, id)
+    }
     /// type User @key(fields: "id") { 
     ///     id: ID!
     ///     name: String
@@ -38,13 +41,15 @@ impl UserQuery {
     /// This subgraph can resolve an instance of this entity if you provide its primary key 
     #[graphql(entity)]
     pub async fn find_user_by_id(&self, ctx: &Context<'_>, id: ID) -> Option<UserType> { 
-        let id = id.parse::<i32>().expect("Failed To Parse from String");
-        resolver::get_user_by_id(id, &get_conn_from_ctx(ctx))
-            .ok()
-            .map(|user| UserType::from(&user))
+        find_user_internally(ctx, id)
     }
 }
-
+fn find_user_internally(ctx: &Context<'_>, id: ID) -> Option<UserType> {
+    let id = id.parse::<i32>().expect("Failed To Parse from String");
+    resolver::get_user_by_id(id, &get_conn_from_ctx(ctx))
+        .ok()
+        .map(|user| UserType::from(&user))
+}
 
 
 impl From<&User> for UserType { 
