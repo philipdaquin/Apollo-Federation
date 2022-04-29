@@ -3,20 +3,20 @@ services:
   accounts:
     build:
       context:  .
-      dockerfile: .accounts/Dockerfile
+      dockerfile: ./accounts/Dockerfile
   products:
     build:
       context:  .
-      dockerfile: .products/Dockerfile
+      dockerfile: ./products/Dockerfile
   reviews:
     build:
       context:  .
-      dockerfile: .reviews/Dockerfile
+      dockerfile: ./reviews/Dockerfile
   inventory:
     build:
       context:  .
-      dockerfile: .inventory/Dockerfile
+      dockerfile: ./inventory/Dockerfile
   apollo-gateway: 
     build:
-      context: .
-      dockerfile: .apollo-gateway/Dockerfile
+      context: ./apollo-gateway
+      dockerfile: Dockerfile

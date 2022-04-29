@@ -17,6 +17,8 @@ yew-interop = {version = "0.3", features = ["script"]}
 wee_alloc = "0.4.5"
 wasm-bindgen = "0.2.79"
 wasm-logger = "0.2.0"
+wasm-bindgen-futures = "0.4.30"
+reqwest = { version = "0.11.10", features = ["blocking", "json"]}
 
 graphql_client = "0.10.0"
 serde = { version = "1.0.130", features = ["derive"] }

@@ -125,12 +125,12 @@ services:
     image: federation:gateway
     container_name: apollo-gateway
     restart: always
-    depends-depends_on:
+    depends_on:
       - accounts
       - products
       - reviews
       - inventory
-    env_file:
+    environment:
       NODE_ENV: docker
     ports: 
       - 4000:4000
