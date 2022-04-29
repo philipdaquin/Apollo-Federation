@@ -1,0 +1,58 @@
+type InventoryType {
+  id: ID!
+  weight: Int
+  price: Int
+  inStock: Boolean!
+  shippingEstimate: Int
+}
+
+"""
+ISO 8601 combined date and time without timezone.
+
+# Examples
+
+* `2015-07-01T08:59:60.123`,
+"""
+scalar NaiveDateTime
+
+"""The Price Type in our System"""
+type ProductType {
+  id: ID!
+  shippingEstimate: Int
+  getByProductId: InventoryType
+  name: String!
+
+  """Price attribute can be Zero"""
+  price: Int
+  weight: Int
+  getProductReviews(id: ID!): [ReviewType!]!
+}
+
+type Query {
+  getAllUsers: [UserType!]!
+  getUserById(id: ID!): UserType
+  getAllInventory: [InventoryType!]!
+
+  """Get all products found inside the Database"""
+  getAllProducts: [ProductType!]!
+  getShippingEstimate(id: ID!): Int
+  getReviews: [ReviewType!]!
+}
+
+type ReviewType {
+  id: ID!
+  body: String!
+  author: UserType!
+  product: ProductType!
+}
+
+type UserType {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  username: String!
+  password: String!
+  email: String!
+  joinedAt: NaiveDateTime!
+  getUserReviews(id: ID!): [ReviewType!]!
+}

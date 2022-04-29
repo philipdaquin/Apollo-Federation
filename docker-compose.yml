@@ -8,7 +8,8 @@ services:
     depends_on: 
       - accounts-db 
     environment:
-      DATABASE_URL: postgres://postgres:$ACCOUNTS_PASSWORD@localhost/$ACCOUNTS_POSTGRES_DB
+      DATABASE_URL: postgres://postgres:$ACCOUNTS_PASSWORD@$ACCOUNTS_DB_HOST/$ACCOUNTS_POSTGRES_DB
+      POSTGRES_DB_HOST: localhost
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:4001/"]
       interval: 1m30s
@@ -24,6 +25,8 @@ services:
     environment: 
       POSTGRES_DB: $ACCOUNTS_POSTGRES_DB
       POSTGRES_PASSWORD: $ACCOUNTS_PASSWORD
+      POSTGRES_DB_HOST: $ACCOUNTS_DB_HOST
+
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 1m30s
@@ -38,7 +41,8 @@ services:
     depends_on: 
       - products-db 
     environment:
-      DATABASE_URL: postgres://postgres:$PRODUCTS_PASSWORD@localhost/$PRODUCTS_POSTGRES_DB
+      DATABASE_URL: postgres://postgres:$PRODUCTS_PASSWORD@$PRODUCTS_DB_HOST/$PRODUCTS_POSTGRES_DB
+      POSTGRES_DB_HOST: localhost
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:4002/"]
       interval: 1m30s
@@ -54,6 +58,7 @@ services:
     environment: 
       POSTGRES_DB: $PRODUCTS_POSTGRES_DB
       POSTGRES_PASSWORD: $PRODUCTS_PASSWORD
+      POSTGRES_DB_HOST: $PRODUCTS_DB_HOST
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 1m30s
@@ -68,7 +73,9 @@ services:
     depends_on: 
       - reviews-db 
     environment:
-      DATABASE_URL: postgres://postgres:$REVIEWS_PASSWORD@localhost/$REVIEWS_POSTGRES_DB
+      DATABASE_URL: postgres://postgres:$REVIEWS_PASSWORD@$REVIEWS_DB_HOST/$REVIEWS_POSTGRES_DB
+      POSTGRES_DB_HOST: localhost
+
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:4003/"]
       interval: 1m30s
@@ -84,6 +91,7 @@ services:
     environment: 
       POSTGRES_DB: $REVIEWS_POSTGRES_DB
       POSTGRES_PASSWORD: $REVIEWS_PASSWORD
+      POSTGRES_DB_HOST: $REVIEWS_DB_HOST
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 1m30s
@@ -98,7 +106,9 @@ services:
     depends_on: 
       - inventory-db 
     environment:
-      DATABASE_URL: postgres://postgres:$INVENTORY_PASSWORD@localhost/$INVENTORY_POSTGRES_DB
+      DATABASE_URL: postgres://postgres:$INVENTORY_PASSWORD@$INVENTORY_DB_HOST/$INVENTORY_POSTGRES_DB
+      POSTGRES_DB_HOST: localhost
+
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:4004/"]
       interval: 1m30s
@@ -114,6 +124,7 @@ services:
     environment: 
       POSTGRES_DB: $INVENTORY_POSTGRES_DB
       POSTGRES_PASSWORD: $INVENTORY_PASSWORD
+      POSTGRES_DB_HOST: $INVENTORY_DB_HOST
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 1m30s
