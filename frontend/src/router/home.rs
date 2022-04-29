@@ -41,8 +41,6 @@ pub fn home_page() -> Html {
             }
         }).collect::<Vec<Html>>();
 
-
-
     html! {
         <>
             <section>

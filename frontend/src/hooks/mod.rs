@@ -3,13 +3,12 @@ use graphql_client::GraphQLQuery;
 use reqwest::{Error, Response};
 use serde::Deserialize;
 use serde_json::Value;
-mod queries;
 use chrono::NaiveDateTime;
 
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "src/graphql/schema.graphql",
-    query_path = "src/graphql/get_all_user.graphql",
+    query_path = "src/graphql/accounts/get_all_user.graphql",
     response_derives = "Clone, PartialEq"
 )]
 pub struct UserQuery;

@@ -5,6 +5,7 @@ mod service;
 pub mod components;
 mod hooks;
 pub mod router;
+pub mod graphql;
 
 use wasm_bindgen::prelude::*;
 use crate::app::App;
