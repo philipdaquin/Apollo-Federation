@@ -8,7 +8,7 @@ services:
     depends_on: 
       - accounts-db 
     environment:
-      - name=value
+      DATABASE_URL: postgres://postgres:$ACCOUNTS_PASSWORD@localhost/$ACCOUNTS_POSTGRES_DB
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:4001/"]
       interval: 1m30s
@@ -22,7 +22,8 @@ services:
     container_name: accounts-db
     restart: always
     environment: 
-
+      POSTGRES_DB: $ACCOUNTS_POSTGRES_DB
+      POSTGRES_PASSWORD: $ACCOUNTS_PASSWORD
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 1m30s
@@ -33,3 +34,5 @@ services:
   # Reviews 
   # Inventory 
   # Frontend
+  # Apollo-Server
+  
