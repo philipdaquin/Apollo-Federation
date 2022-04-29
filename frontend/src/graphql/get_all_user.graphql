@@ -1,0 +1,12 @@
+query UserQuery {
+  getAllUsers {
+    id
+    email
+    firstName
+    lastName
+    username
+    password
+    joinedAt
+  }
+}
+

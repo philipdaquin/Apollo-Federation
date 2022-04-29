@@ -3,6 +3,17 @@ use graphql_client::GraphQLQuery;
 use reqwest::{Error, Response};
 use serde::Deserialize;
 use serde_json::Value;
+mod queries;
+use chrono::NaiveDateTime;
+
+#[derive(GraphQLQuery)]
+#[graphql(
+    schema_path = "src/graphql/schema.graphql",
+    query_path = "src/graphql/get_all_user.graphql",
+    response_derives = "Clone, PartialEq"
+)]
+pub struct UserQuery;
+
 
 
 #[derive(Debug, Deserialize)]
@@ -11,7 +22,7 @@ pub struct GraphQLResponse<T> {
 }
 
 pub async fn build_request(request_json: &Value) -> Result<Response, Error> {
-    let api_url = option_env!("API_URL").unwrap_or("http://127.0.0.1:8000/graphql");
+    let api_url = option_env!("API_URL").unwrap_or("http://localhost:4000/graphqll");
     let response = reqwest::Client::new()
         .post(api_url)
         .json(request_json)

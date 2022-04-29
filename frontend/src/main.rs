@@ -1,6 +1,6 @@
 mod app;
 mod api;
-mod types;
+mod models;
 mod service;
 pub mod components;
 mod hooks;
