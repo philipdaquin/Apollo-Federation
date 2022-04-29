@@ -31,8 +31,107 @@ services:
       retries: 5
       start_period: 30s
   # Products
+  products: 
+    image: federation:products
+    container_name: products
+    restart: always
+    depends_on: 
+      - products-db 
+    environment:
+      DATABASE_URL: postgres://postgres:$PRODUCTS_PASSWORD@localhost/$PRODUCTS_POSTGRES_DB
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:4002/"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    ports:
+      - 4002:4002
+  products-db: 
+    image: postgres:latest
+    container_name: products-db
+    restart: always
+    environment: 
+      POSTGRES_DB: $PRODUCTS_POSTGRES_DB
+      POSTGRES_PASSWORD: $PRODUCTS_PASSWORD
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
   # Reviews 
+  reviews: 
+    image: federation:reviews
+    container_name: reviews
+    restart: always
+    depends_on: 
+      - reviews-db 
+    environment:
+      DATABASE_URL: postgres://postgres:$REVIEWS_PASSWORD@localhost/$REVIEWS_POSTGRES_DB
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:4003/"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    ports:
+      - 4003:4003
+  reviews-db: 
+    image: postgres:latest
+    container_name: reviews-db
+    restart: always
+    environment: 
+      POSTGRES_DB: $REVIEWS_POSTGRES_DB
+      POSTGRES_PASSWORD: $REVIEWS_PASSWORD
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
   # Inventory 
-  # Frontend
+  inventory: 
+    image: federation:inventory
+    container_name: inventory
+    restart: always
+    depends_on: 
+      - inventory-db 
+    environment:
+      DATABASE_URL: postgres://postgres:$INVENTORY_PASSWORD@localhost/$INVENTORY_POSTGRES_DB
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:4004/"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    ports:
+      - 4004:4004
+  inventory-db: 
+    image: postgres:latest
+    container_name: inventory-db
+    restart: always
+    environment: 
+      POSTGRES_DB: $INVENTORY_POSTGRES_DB
+      POSTGRES_PASSWORD: $INVENTORY_PASSWORD
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
   # Apollo-Server
+  apollo-gateway:
+    image: federation:gateway
+    container_name: apollo-gateway
+    restart: always
+    depends-depends_on:
+      - accounts
+      - products
+      - reviews
+      - inventory
+    env_file:
+      NODE_ENV: docker
+    ports: 
+      - 4000:4000
   
