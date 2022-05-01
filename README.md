@@ -1,5 +1,5 @@
 # Apollo-Federation in Rust 🚀
-- Note: No Mutations (yet)
+- Frontend WIP
 ## Main Services
 - Accounts
 - Products
