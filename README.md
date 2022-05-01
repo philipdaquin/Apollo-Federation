@@ -5,6 +5,7 @@
 - Products
 - Inventory 
 - Reviews 
+- Payments
 ## Techstack 
 - Yew/ Web Assembly 
 - Apollo Gateway
