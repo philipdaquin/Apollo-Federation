@@ -100,24 +100,21 @@ impl UserMutation {
     #[graphql(name = "loginUser")]
     pub async fn login_user(&self, ctx: &Context<'_>, login: UserLogin) -> Result<String, Error> { 
         // Get user by username 
-        let user_info = resolver::get_user_by_name(login.username, &get_conn_from_ctx(ctx));
-        if let Ok(info) = user_info { 
-            let User {password, ..} = info.clone();
-            if verify_password(&password, &login.password)? {
-                let id = AuthenticationRole::from_str(info.role.as_str())
-                    .expect("");
-                let token = common_utils::generate_token(info.username, id);
-                return Ok(token)
+        let user_info = resolver::get_user_by_name(login.username, &get_conn_from_ctx(ctx)).ok();
+        if let Some(info) = user_info { 
+ 
+            if let Ok(role) = verify_password(&info.password, &login.password)  {
+                if role { 
+                    let id = AuthenticationRole::from_str(info.role.as_str())
+                        .expect("");
+                    let token =  generate_token(info.username, id);
+                    return Ok(token)
+                }
             }
         }
         Err(Error::new("Probably Wrong Password? 🤣"))
     }
 }
-
-
-
-
-
 
 /// Diesel Type into Graphql typ e
 impl From<&User> for UserType { 
@@ -144,13 +141,13 @@ impl From<&NewUserInput> for NewUser {
             first_name: f.first_name.clone(),
             last_name: f.last_name.clone(), 
             username: f.username.clone(),
-            password: f.password.clone(), 
+            password: hash_password(f.password.as_str())
+                .expect("Can't get the hash for password"), 
             email: f.email.clone(),
             role: f.role.to_string()
         }
     }
 }
-
 
 #[async_trait::async_trait]
 impl Guard for RoleGuard  {
