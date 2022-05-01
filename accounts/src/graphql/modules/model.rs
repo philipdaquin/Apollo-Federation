@@ -14,7 +14,7 @@ pub struct User {
     
 } 
 
-#[derive(Clone, Debug, Insertable, AsChangeset)]
+#[derive(Clone, Debug, Insertable, AsChangeset, PartialEq)]
 #[table_name = "users"]
 pub struct NewUser { 
     pub first_name: String,

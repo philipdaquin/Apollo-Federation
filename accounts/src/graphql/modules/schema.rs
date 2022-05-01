@@ -1,7 +1,9 @@
 use async_graphql::*;
 use async_graphql_actix_web::*;
 use chrono::{NaiveDateTime, DateTime, Utc};
-use super::{resolver::{get_user_by_id, get_all_users, self}, model::User};
+use super::{resolver::{get_user_by_id, get_all_users, self}, 
+    model::{User, NewUser}
+};
 use crate::graphql::config::get_conn_from_ctx;
 
 
@@ -17,8 +19,6 @@ pub struct UserType {
 }
 #[derive(Default)]
 pub struct UserQuery;
-
-
 #[Object(extends)]
 impl UserQuery { 
     #[graphql(name = "getAllUsers")]
@@ -52,6 +52,54 @@ fn find_user_internally(ctx: &Context<'_>, id: ID) -> Option<UserType> {
 }
 
 
+#[derive(InputObject)]
+pub struct NewUserInput { 
+    pub first_name: String,
+    pub last_name: String,
+    pub username: String, 
+    pub password: String,
+    pub email: String,
+}
+
+#[derive(InputObject)] 
+pub struct UserLogin { 
+    pub username: String, 
+    pub password: String
+}
+
+#[derive(Default)]
+pub struct UserMutation;
+
+#[Object]
+impl UserMutation { 
+    #[graphql(name = "registerUser")]
+    pub async fn register_user(&self, ctx: &Context<'_>, new_user: NewUserInput) ->  UserType { 
+        let user = resolver::create_user(
+            NewUser::from(&new_user), &get_conn_from_ctx(ctx))
+            .expect("Unable to Convert 'NewUserInput' type to 'NewUser'");
+        UserType::from(&user)
+    }
+    #[graphql(name = "updateUserDetails")]
+    pub async fn update_user(&self, ctx: &Context<'_>, new_user: NewUserInput, id: ID) -> UserType { 
+        let updated_user = resolver::update_user_details(
+            id.parse::<i32>().expect(""), 
+            NewUser::from(&new_user), 
+            &get_conn_from_ctx(ctx)
+        ).expect("");
+        UserType::from(&updated_user)
+    } 
+
+    #[graphql(name = "loginUser")]
+    pub async fn login_user(&self, ctx: &Context<'_>, login: UserLogin) -> Result<String, Error> { 
+
+        todo!()
+    }
+
+    
+}
+
+
+/// Diesel Type into Graphql typ e
 impl From<&User> for UserType { 
     fn from(user: &User) -> Self {
         Self { 
@@ -62,6 +110,19 @@ impl From<&User> for UserType {
             password: user.password.clone(),
             email: user.email.clone(),
             joined_at: user.joined_at
+        }
+    }
+}
+
+/// Convert Graphql Type into Reading Database Type 
+impl From<&NewUserInput> for NewUser { 
+    fn from(f: &NewUserInput) -> Self {
+        Self { 
+            first_name: f.first_name.clone(),
+            last_name: f.last_name.clone(), 
+            username: f.username.clone(),
+            password: f.password.clone(), 
+            email: f.email.clone()
         }
     }
 }
