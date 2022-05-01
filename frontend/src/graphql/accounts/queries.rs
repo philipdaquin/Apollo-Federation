@@ -67,5 +67,4 @@ impl graphql_client::GraphQLQuery for UserQuery {
             operation_name: OPERATION_NAME
         }
     }
-
 }

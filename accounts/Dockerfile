@@ -7,11 +7,12 @@ RUN USER=root cargo new --bin /accounts/docker-build
 # Set the Working directory to build
 WORKDIR /accounts/docker-build 
 # Copy Cargo.lock to build file
+COPY /.env ./
 COPY /Cargo.lock ./
 # Copy Cargo toml to the build file 
 COPY ./accounts/Cargo.toml ./ 
 # Cache Dependencies 
-COPY ./accounts/ ./
+COPY ./accounts/ .
 RUN cargo install --path . --locked
 
 
