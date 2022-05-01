@@ -27,7 +27,9 @@ pub struct Claim {
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 pub enum Role { 
     Admin, 
-    User
+    User,
+    Customer, 
+    Operator
 }
 
 pub fn generate_token(username: String, role: Role) -> String { 

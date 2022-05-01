@@ -4,11 +4,13 @@ use async_graphql::*;
 use async_graphql_actix_web::*;
 use chrono::{NaiveDateTime, DateTime, Utc};
 use super::{resolver::{get_user_by_id, get_all_users, self}, 
-    model::{User, NewUser}
+    model::{User, NewUser, Role}
 };
 use crate::graphql::{config::get_conn_from_ctx, utils::verify_password};
 use common_utils::*;
 use jsonwebtoken;
+
+
 #[derive(SimpleObject)]
 pub struct UserType { 
     pub id: ID,
@@ -17,7 +19,8 @@ pub struct UserType {
     pub username: String,
     pub password: String,
     pub email: String,
-    pub joined_at: NaiveDateTime
+    pub joined_at: NaiveDateTime,
+    pub role: String
 }
 #[derive(Default)]
 pub struct UserQuery;
@@ -60,6 +63,7 @@ pub struct NewUserInput {
     pub username: String, 
     pub password: String,
     pub email: String,
+    pub role: Role
 }
 
 #[derive(InputObject)] 
@@ -97,18 +101,14 @@ impl UserMutation {
         if let Ok(info) = user_info { 
             let User {password, ..} = info.clone();
             if verify_password(&password, &login.password)? {
-                let id = AuthenticationRole::from_str(info.username.as_str())
+                let id = AuthenticationRole::from_str(info.role.as_str())
                     .expect("");
-                return Ok(common_utils::generate_token(info.username, id))
+                let token = common_utils::generate_token(info.username, id);
+                return Ok(token)
             }
         }
-        todo!()
+        Err(Error::new("Probably Wrong Password? 🤣"))
     }
-
-    pub async fn logout_user(&self, ctx: &Context<'_>) -> Result<bool, Error> { 
-        todo!()
-    }
-
     
 }
 
@@ -123,7 +123,10 @@ impl From<&User> for UserType {
             username: user.username.clone(),
             password: user.password.clone(),
             email: user.email.clone(),
-            joined_at: user.joined_at
+            joined_at: user.joined_at,
+            role: Role::from_str(user.role.as_str())
+                .expect("")
+                .to_string()
         }
     }
 }
@@ -136,7 +139,8 @@ impl From<&NewUserInput> for NewUser {
             last_name: f.last_name.clone(), 
             username: f.username.clone(),
             password: f.password.clone(), 
-            email: f.email.clone()
+            email: f.email.clone(),
+            role: f.role.to_string()
         }
     }
 }
