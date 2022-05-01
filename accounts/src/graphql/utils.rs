@@ -1,8 +1,10 @@
-use actix_web::{Result, guard::Guard};
+use actix_web::{Result};
 use argonautica::{Error, Hasher, Verifier};
 use async_graphql::async_trait;
 use lazy_static::lazy_static;
 use async_graphql::*;
+use async_graphql::Guard;
+use super::modules::model::Role;
 
 lazy_static! {
     static ref PASSWORD_SECRET_KEY: String =
@@ -24,3 +26,35 @@ pub fn verify_password(hash: &str, password: &str) -> Result<bool, Error> {
         .verify()
 }
 
+use common_utils::Role as AuthenticationRole;
+pub struct RoleGuard { 
+    pub role: AuthenticationRole
+}
+impl RoleGuard { 
+    fn new(role: AuthenticationRole) -> Self { 
+        RoleGuard { 
+            role
+        }
+    }
+}
+
+
+
+/// Field will be visible to users with Role::Admin and
+/// Role::Analyst
+pub fn is_customer(ctx: &Context<'_>) -> bool {
+    ctx.data_opt::<Role>() == Some(&Role::Admin) ||
+    ctx.data_opt::<Role>() == Some(&Role::Customer)
+}
+
+/// Field will be visible to users with Role::Admin and
+/// Role::Analyst
+pub fn is_operator(ctx: &Context<'_>) -> bool {
+    ctx.data_opt::<Role>() == Some(&Role::Admin) ||
+    ctx.data_opt::<Role>() == Some(&Role::Operator)
+}
+
+/// Field will only be visible to users with Role::Admin
+pub fn is_admin(ctx: &Context<'_>) -> bool {
+    ctx.data_opt::<Role>() == Some(&Role::Admin)
+}

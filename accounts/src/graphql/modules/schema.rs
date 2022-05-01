@@ -6,10 +6,13 @@ use chrono::{NaiveDateTime, DateTime, Utc};
 use super::{resolver::{get_user_by_id, get_all_users, self}, 
     model::{User, NewUser, Role}
 };
+use common_utils::{Role as AuthenticationRole};
+use crate::graphql::utils::RoleGuard;
+use async_graphql::Guard;
 use crate::graphql::{config::get_conn_from_ctx, utils::verify_password};
 use common_utils::*;
 use jsonwebtoken;
-
+use crate::graphql::utils::*;
 
 #[derive(SimpleObject)]
 pub struct UserType { 
@@ -109,8 +112,11 @@ impl UserMutation {
         }
         Err(Error::new("Probably Wrong Password? 🤣"))
     }
-    
 }
+
+
+
+
 
 
 /// Diesel Type into Graphql typ e
@@ -145,17 +151,6 @@ impl From<&NewUserInput> for NewUser {
     }
 }
 
-use common_utils::Role as AuthenticationRole;
-struct RoleGuard { 
-    role: AuthenticationRole
-}
-impl RoleGuard { 
-    fn new(role: AuthenticationRole) -> Self { 
-        RoleGuard { 
-            role
-        }
-    }
-}
 
 #[async_trait::async_trait]
 impl Guard for RoleGuard  {
@@ -173,4 +168,3 @@ impl Guard for RoleGuard  {
         }
     }
 }
-
