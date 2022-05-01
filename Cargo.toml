@@ -5,6 +5,6 @@ members = [
     "products", 
     "reviews", 
     "frontend",
-    "common_utils"
-    
+    "common_utils",
+    "payments"
 ]

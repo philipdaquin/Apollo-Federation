@@ -87,6 +87,7 @@ impl UserMutation {
             .expect("Unable to Convert 'NewUserInput' type to 'NewUser'");
         UserType::from(&user)
     }
+    
     #[graphql(name = "updateUserDetails")]
     pub async fn update_user(&self, ctx: &Context<'_>, new_user: NewUserInput, id: ID) -> UserType { 
         let updated_user = resolver::update_user_details(
