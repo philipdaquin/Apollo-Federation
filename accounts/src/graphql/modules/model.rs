@@ -13,7 +13,6 @@ pub struct User {
     pub joined_at: NaiveDateTime
     
 } 
-
 #[derive(Clone, Debug, Insertable, AsChangeset, PartialEq)]
 #[table_name = "users"]
 pub struct NewUser { 
@@ -24,3 +23,7 @@ pub struct NewUser {
     pub email: String,
 }
 
+pub enum Role { 
+    Admin, 
+    User
+}

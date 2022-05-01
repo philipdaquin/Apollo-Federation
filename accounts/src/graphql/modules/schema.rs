@@ -1,12 +1,14 @@
+use std::str::FromStr;
+
 use async_graphql::*;
 use async_graphql_actix_web::*;
 use chrono::{NaiveDateTime, DateTime, Utc};
 use super::{resolver::{get_user_by_id, get_all_users, self}, 
     model::{User, NewUser}
 };
-use crate::graphql::config::get_conn_from_ctx;
-
-
+use crate::graphql::{config::get_conn_from_ctx, utils::verify_password};
+use common_utils::*;
+use jsonwebtoken;
 #[derive(SimpleObject)]
 pub struct UserType { 
     pub id: ID,
@@ -51,7 +53,6 @@ fn find_user_internally(ctx: &Context<'_>, id: ID) -> Option<UserType> {
         .map(|user| UserType::from(&user))
 }
 
-
 #[derive(InputObject)]
 pub struct NewUserInput { 
     pub first_name: String,
@@ -91,7 +92,20 @@ impl UserMutation {
 
     #[graphql(name = "loginUser")]
     pub async fn login_user(&self, ctx: &Context<'_>, login: UserLogin) -> Result<String, Error> { 
+        // Get user by username 
+        let user_info = resolver::get_user_by_name(login.username, &get_conn_from_ctx(ctx));
+        if let Ok(info) = user_info { 
+            let User {password, ..} = info.clone();
+            if verify_password(&password, &login.password)? {
+                let id = AuthenticationRole::from_str(info.username.as_str())
+                    .expect("");
+                return Ok(common_utils::generate_token(info.username, id))
+            }
+        }
+        todo!()
+    }
 
+    pub async fn logout_user(&self, ctx: &Context<'_>) -> Result<bool, Error> { 
         todo!()
     }
 
@@ -126,3 +140,33 @@ impl From<&NewUserInput> for NewUser {
         }
     }
 }
+
+use common_utils::Role as AuthenticationRole;
+struct RoleGuard { 
+    role: AuthenticationRole
+}
+impl RoleGuard { 
+    fn new(role: AuthenticationRole) -> Self { 
+        RoleGuard { 
+            role
+        }
+    }
+}
+
+#[async_trait::async_trait]
+impl Guard for RoleGuard  {
+    async fn check(&self, ctx: &Context<'_>) -> Result<()> { 
+        
+        if ctx.data_opt::<AuthenticationRole>() == Some(&AuthenticationRole::Admin) 
+        || ctx.data_opt::<AuthenticationRole>() == Some(&self.role) {
+            Ok(())
+        } else {
+            let guard_error = ctx.data_opt::<jsonwebtoken::errors::Error>().clone();
+            match guard_error {
+                Some(e) => return Err(format!("{:?}", e.kind()).into()),
+                None => return Err(format!("Access denied: {} role required", &self.role).into())
+            }
+        }
+    }
+}
+

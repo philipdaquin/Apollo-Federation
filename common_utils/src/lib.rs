@@ -71,3 +71,5 @@ pub fn get_role(req: HttpRequest) -> Option<Role> {
         })
     })
 }
+
+

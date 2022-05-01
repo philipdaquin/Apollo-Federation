@@ -1,13 +1,13 @@
 use async_graphql::{EmptySubscription, 
     MergedObject, Schema, SchemaBuilder, EmptyMutation};
-use super::modules::schema::{UserQuery};
+use super::modules::schema::{UserQuery, UserMutation};
 
 
 #[derive(MergedObject, Default)]
 pub struct Query(UserQuery);
 
 #[derive(MergedObject, Default)]
-pub struct Mutation;
+pub struct Mutation(UserMutation);
 
-pub type AppSchema = Schema<Query, EmptyMutation, EmptySubscription>;
-pub type AppSchemaBuilder = SchemaBuilder<Query, EmptyMutation, EmptySubscription>;
+pub type AppSchema = Schema<Query, Mutation, EmptySubscription>;
+pub type AppSchemaBuilder = SchemaBuilder<Query, Mutation, EmptySubscription>;
