@@ -11,11 +11,13 @@ pub fn navbar() -> Html {
                     <div class="nav__toggle" id="nav-toggle">
                         <i class="bx bxs-grid"></i>
                     </div>
-                    <a href="#" class="nav__logo">{"Apollo 🚀"}</a>
-
+                    <Link<AppRoute> to={AppRoute::Home} classes={"nav__link"}>
+                        <a href="#" class="nav__logo">{"Apollo 🚀"}</a>
+                    </Link<AppRoute>>
                     <div class="nav__menu" id="nav-menu">
                         <ul class="nav__list">
                             <Link<AppRoute> to={AppRoute::Home} classes={"nav__link"}>{"Home"}</Link<AppRoute>>
+                            <Link<AppRoute> to={AppRoute::FeaturePage} classes={"nav__link"}>{"Feature"}</Link<AppRoute>>
                             // <Link<AppRoute> to={AppRoute::Feature} classes={"nav__link"}>{"Feature"}</Link<AppRoute>>
                             // <Link<AppRoute> to={AppRoute::Mens} classes={"nav__link"}>{"Mens"}</Link<AppRoute>>
                             // <Link<AppRoute> to={AppRoute::Womens} classes={"nav__link"}>{"Womens"}</Link<AppRoute>>
