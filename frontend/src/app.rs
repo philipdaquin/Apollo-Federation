@@ -3,12 +3,11 @@ use yew_router::prelude::*;
 use crate::{
     components::{
         navbar::Navbar,
-        header::Header,
         footer::Footer
     },
     router::{AppRoute, 
         home::Home,
-        about::About,
+        // mens_page::About,
         switch,
     }
 };
