@@ -5,13 +5,27 @@ use serde::Deserialize;
 use serde_json::Value;
 use chrono::NaiveDateTime;
 
+
+pub use use_query::use_query;
+
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "src/graphql/schema.graphql",
-    query_path = "src/graphql/accounts/get_all_user.graphql",
+    query_path = "src/graphql/queries.graphql",
     response_derives = "Clone, PartialEq"
 )]
 pub struct UserQuery;
+
+#[derive(GraphQLQuery)]
+#[graphql(
+    schema_path = "src/graphql/schema.graphql",
+    query_path = "src/graphql/queries.graphql",
+    response_derives = "Clone, PartialEq"
+
+)]
+pub struct GetAllProducts;
+
+
 
 
 

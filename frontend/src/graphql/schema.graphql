@@ -6,6 +6,15 @@ type InventoryType {
   shippingEstimate: Int
 }
 
+type Mutation {
+  registerUser(newUser: NewUserInput!): UserType!
+  updateUserDetails(newUser: NewUserInput!, id: ID!): UserType!
+  loginUser(login: UserLogin!): String!
+  createNewProduct(newProduct: NewProductInput!): ProductType
+  updateProduct(productId: ID!, userId: ID!, newInput: NewProductInput!): ProductType
+  deleteProduct(productId: ID!): Boolean!
+}
+
 """
 ISO 8601 combined date and time without timezone.
 
@@ -14,6 +23,30 @@ ISO 8601 combined date and time without timezone.
 * `2015-07-01T08:59:60.123`,
 """
 scalar NaiveDateTime
+
+input NewProductInput {
+  name: String!
+  price: Int
+  weight: Int
+  category: String
+  createdBy: Int
+  tags: String
+
+  """users should not be able tto change the time manually"""
+  createdAt: NaiveDateTime
+  updatedAt: NaiveDateTime
+  description: String
+  imageUrl: String
+}
+
+input NewUserInput {
+  firstName: String!
+  lastName: String!
+  username: String!
+  password: String!
+  email: String!
+  role: Role!
+}
 
 """The Price Type in our System"""
 type ProductType {
@@ -25,6 +58,13 @@ type ProductType {
   """Price attribute can be Zero"""
   price: Int
   weight: Int
+  category: String
+  createdBy: Int
+  tags: String
+  createdAt: NaiveDateTime
+  updatedAt: NaiveDateTime
+  description: String
+  imageUrl: String
   getProductReviews(id: ID!): [ReviewType!]!
 }
 
@@ -46,6 +86,18 @@ type ReviewType {
   product: ProductType!
 }
 
+enum Role {
+  ADMIN
+  CUSTOMER
+  OPERATOR
+  USER
+}
+
+input UserLogin {
+  username: String!
+  password: String!
+}
+
 type UserType {
   id: ID!
   firstName: String!
@@ -54,5 +106,7 @@ type UserType {
   password: String!
   email: String!
   joinedAt: NaiveDateTime!
+  role: String!
+  getUserProducts(id: ID!): [ProductType!]!
   getUserReviews(id: ID!): [ReviewType!]!
 }

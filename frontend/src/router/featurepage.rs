@@ -1,9 +1,12 @@
 use yew::{prelude::*, function_component, html, Html};
-
+use crate::components::productlist::Productlist;
 #[function_component(FeaturePage)]
 pub fn feature_page() -> Html {
     html! {
         <>
+
+            <Productlist/>
+
             <section class="featured section" id="shop">
                 <h2 class="section-title">{"All Products"}</h2>
                 <div class="featured__container bd-grid">

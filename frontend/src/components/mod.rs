@@ -5,3 +5,4 @@ pub mod feature;
 pub mod collection;
 pub mod womens;
 pub mod newsletter;
+pub mod productlist;

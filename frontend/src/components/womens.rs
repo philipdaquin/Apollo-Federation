@@ -30,7 +30,7 @@ pub fn woments_object() -> Html {
 
                     <article class="sneaker">
                         <img src="../../assets/img/women1.png" alt="" class="sneaker__img"/>
-                        <span class="sneaker__name">{"Nike Get5"}</span>
+                        <span class="sneaker__name">{"Nike Gets"}</span>
                         <span class="sneaker__preci">{"$129.99"}</span>
                         <a href="" class="button-light">{"Add to Cart "}<i class="bx bx-right-arrow-alt button-icon"></i></a>
                     </article>
