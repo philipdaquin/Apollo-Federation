@@ -1,6 +1,12 @@
 #[macro_use]
 extern crate lazy_static;
 
+#[macro_use]
+extern crate thiserror;
+
+
+pub mod error_extension;
+
 use std::{env::var, str::FromStr};
 use actix_web::{HttpResponse, HttpRequest};
 use chrono::{Duration, Local};

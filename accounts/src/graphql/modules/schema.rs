@@ -59,6 +59,9 @@ fn find_user_internally(ctx: &Context<'_>, id: ID) -> Option<UserType> {
         .map(|user| UserType::from(&user))
 }
 
+
+#[derive(Default)]
+pub struct UserMutation;
 #[derive(InputObject)]
 pub struct NewUserInput { 
     pub first_name: String,
@@ -68,15 +71,11 @@ pub struct NewUserInput {
     pub email: String,
     pub role: Role
 }
-
 #[derive(InputObject)] 
 pub struct UserLogin { 
     pub username: String, 
     pub password: String
 }
-
-#[derive(Default)]
-pub struct UserMutation;
 
 #[Object]
 impl UserMutation { 

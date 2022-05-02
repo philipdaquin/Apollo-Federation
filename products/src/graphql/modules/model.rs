@@ -1,5 +1,6 @@
 use crate::schema::products;
 use chrono::{NaiveDateTime, NaiveDate};
+use serde::{Serialize, Deserialize};
 #[derive(Debug, Clone, PartialEq, Identifiable, Queryable)]
 #[table_name = "products"]
 pub struct Product { 
@@ -31,6 +32,7 @@ pub struct NewProduct {
     pub image_url: Option<String>
 }
 
+#[derive(Clone, Debug, PartialEq)]
 pub struct ShoppingCart { 
     id: i32,
     session_id: i32, 
@@ -40,6 +42,7 @@ pub struct ShoppingCart {
     updated_at: NaiveDateTime 
 }
 
+#[derive(Clone, Debug)]
 pub struct ShoppingSession { 
     id: i32, 
     user_id: i32, 

@@ -4,6 +4,7 @@ ENV CARGO_TERM_COLOR always
 RUN apt-get update && apt-get install -y libpq-dev clang
 # Create an empty project for caching dependencies
 RUN USER=root cargo new --bin /accounts/docker-build
+COPY common_utils ./
 # Set the Working directory to build
 WORKDIR /accounts/docker-build 
 # Copy Cargo.lock to build file
