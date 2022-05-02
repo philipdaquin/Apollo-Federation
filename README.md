@@ -1,10 +1,11 @@
 # Apollo-Federation in Rust 🚀
-- Note: No Mutations (yet)
+- Frontend WIP
 ## Main Services
 - Accounts
 - Products
 - Inventory 
 - Reviews 
+- Payments
 ## Techstack 
 - Yew/ Web Assembly 
 - Apollo Gateway
