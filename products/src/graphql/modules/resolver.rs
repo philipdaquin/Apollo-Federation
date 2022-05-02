@@ -10,6 +10,12 @@ pub fn get_all_products(conn: &PgConnection) -> QueryResult<Vec<Product>> {
     products::table.load(conn)
 }
 
+pub fn get_all_products_by_id(id: i32, conn: &PgConnection) -> QueryResult<Vec<Product>> { 
+    products::table.filter(
+        products::created_by.eq(id)
+    ).load(conn)
+}
+
 pub fn create_product(new_product: NewProduct, conn: &PgConnection) -> QueryResult<Product> { 
     diesel::insert_into(products::table)
         .values(new_product)

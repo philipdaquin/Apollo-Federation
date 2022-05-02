@@ -14,7 +14,7 @@ use {
 pub struct QueryProducts;
 
 ///  The Price Type in our System 
-#[derive(Debug, Clone, SimpleObject)]
+#[derive(SimpleObject)]
 pub struct ProductType { 
     pub id: ID,
     pub name: String, 
@@ -30,8 +30,27 @@ pub struct ProductType {
     pub image_url: Option<String>
 }
 
+pub struct UserType { 
+    pub id: ID
+}
 
-#[Object]
+#[Object(extends)]
+impl UserType { 
+    #[graphql(external)]
+    pub async fn id(&self) -> &ID { &self.id}
+
+    #[graphql(name = "getUserProducts")]
+    pub async fn products(&self, ctx: &Context<'_>, id: ID) -> Vec<ProductType> { 
+        let id = id.parse::<i32>().expect("");
+        resolver::get_all_products_by_id(id, &get_conn_from_ctx(ctx))
+            .expect("")
+            .iter()
+            .map(|f| ProductType::from(f))
+            .collect()
+    }
+}
+
+#[Object(extends)]
 impl QueryProducts { 
     /// Get all products found inside the Database
     #[graphql(name = "getAllProducts")]
@@ -50,12 +69,16 @@ impl QueryProducts {
     #[graphql(name = "getShippingEstimate")]
     pub async fn shipping_estimate(&self, ctx: &Context<'_>, id: ID) -> Option<i32> { 
         let ProductType { 
-            id, 
             price, 
             weight, .. 
         }  = find_product_by_id_internal(ctx, id).unwrap(); 
         Some(price.unwrap_or_default() * weight.unwrap_or_default())
     } 
+    #[graphql(entity)]
+    pub async fn find_user_by_id(&self, #[graphql(key)] id: ID) -> UserType { 
+        UserType { id }
+    }
+
 }
 fn find_product_by_id_internal(ctx: &Context<'_>, id: ID) -> Option<ProductType> { 
     let id = id.parse::<i32>().expect("");
@@ -85,6 +108,7 @@ pub struct NewProductInput {
 
 #[Object]
 impl MutateProduct { 
+    #[graphql(name = "createNewProduct")]
     async fn create_product(&self, ctx: &Context<'_>, new_product: NewProductInput) -> Option<ProductType> { 
         let product = resolver::create_product(
             NewProduct::from(&new_product), 
@@ -93,6 +117,7 @@ impl MutateProduct {
         ProductType::from(&product).into()
             
     }    
+    #[graphql(name = "updateProduct")]
     async fn update_product(
         &self, 
         ctx: &Context<'_>, 
@@ -115,12 +140,17 @@ impl MutateProduct {
             &get_conn_from_ctx(ctx)).expect("");
         ProductType::from(&product).into()
     }
-
+    #[graphql(name = "deleteProduct")]
     async fn delete_product(&self, ctx: &Context<'_>, product_id: ID) -> FieldResult<bool> { 
         Ok(resolver::delete_product(product_id.parse()?, &get_conn_from_ctx(ctx)).expect(""))
        
     }
 }
+
+
+
+
+
 
 
 impl From<&Product> for ProductType { 
