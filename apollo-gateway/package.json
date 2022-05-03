@@ -15,8 +15,8 @@
     "graphql": "^16.4.0"
   },
   "devDependencies": {
+    "nodemon": "latest",
     "concurrently": "latest",
-    "lerna": "latest",
-    "nodemon": "latest"
+    "lerna": "latest"
   }
 }
