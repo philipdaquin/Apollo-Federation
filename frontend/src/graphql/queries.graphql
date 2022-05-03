@@ -25,3 +25,5 @@ query GetAllProducts {
     imageUrl
   }
 }
+
+

@@ -32,7 +32,6 @@ pub mod user_query {
     /// No Variables in getAllUsers
     #[derive(Serialize)]
     pub struct Variables;
-    
     /// The Response in the Accounts Service
     #[derive(Deserialize)]
     pub struct ResponseData { 
@@ -61,7 +60,6 @@ impl graphql_client::GraphQLQuery for UserQuery {
         }
     }
 }
-
 
 pub struct GetAllProducts;
 pub mod product_query { 
