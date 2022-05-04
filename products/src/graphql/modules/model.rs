@@ -1,6 +1,8 @@
 use crate::schema::products;
 use chrono::{NaiveDateTime, NaiveDate};
 use serde::{Serialize, Deserialize};
+use super::schema::{ProductType, NewProductInput};
+
 #[derive(Debug, Clone, PartialEq, Identifiable, Queryable)]
 #[table_name = "products"]
 pub struct Product { 
@@ -49,4 +51,40 @@ pub struct ShoppingSession {
     total: i32, 
     created_at: NaiveDateTime,
     updated_at: NaiveDateTime
+}
+
+
+impl From<&Product> for ProductType { 
+    fn from(f: &Product) -> Self {
+        ProductType { 
+            id: f.id.into(), 
+            name: f.name.to_string(), 
+            price: f.price.clone(), 
+            weight: f.weight.clone(),
+            category: f.category.clone(),
+            created_by: f.created_by.clone(),
+            tags: f.tags.clone(),
+            created_at: chrono::Utc::now().naive_utc().into(), 
+            updated_at: f.updated_at.clone(), 
+            description: f.description.clone(), 
+            image_url: f.image_url.clone()
+        }
+    }
+}
+
+impl From<&NewProductInput> for NewProduct { 
+    fn from(f: &NewProductInput) -> Self {
+        Self { 
+            name: f.name.to_owned(), 
+            price: f.price,
+            weight: f.weight,
+            category: f.category.to_owned(),
+            created_by: f.created_by,
+            tags: f.tags.to_owned(),
+            created_at: f.created_at.clone(),
+            updated_at: f.updated_at,
+            description: f.description.to_owned(),
+            image_url: f.image_url.to_owned()
+        }
+    }
 }

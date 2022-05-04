@@ -8,5 +8,6 @@ table! {
         updated_at -> Nullable<Timestamp>,
         media -> Nullable<Varchar>,
         is_edited -> Nullable<Bool>,
+        created_at -> Nullable<Timestamp>,
     }
 }

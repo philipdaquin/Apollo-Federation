@@ -51,7 +51,7 @@ embed_migrations!();
 pub fn create_schema(pool: DbPool) -> AppSchema { 
     Schema::build(
         Query::default(), 
-        EmptyMutation, 
+        Mutation::default(), 
         EmptySubscription
     )
     // Add a global data that can be accessed in the Schema

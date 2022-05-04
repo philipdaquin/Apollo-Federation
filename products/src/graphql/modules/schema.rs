@@ -153,37 +153,3 @@ impl MutateProduct {
 
 
 
-impl From<&Product> for ProductType { 
-    fn from(f: &Product) -> Self {
-        ProductType { 
-            id: f.id.into(), 
-            name: f.name.to_string(), 
-            price: f.price.clone(), 
-            weight: f.weight.clone(),
-            category: f.category.clone(),
-            created_by: f.created_by.clone(),
-            tags: f.tags.clone(),
-            created_at: chrono::Utc::now().naive_utc().into(), 
-            updated_at: f.updated_at.clone(), 
-            description: f.description.clone(), 
-            image_url: f.image_url.clone()
-        }
-    }
-}
-
-impl From<&NewProductInput> for NewProduct { 
-    fn from(f: &NewProductInput) -> Self {
-        Self { 
-            name: f.name.to_owned(), 
-            price: f.price,
-            weight: f.weight,
-            category: f.category.to_owned(),
-            created_by: f.created_by,
-            tags: f.tags.to_owned(),
-            created_at: f.created_at.clone(),
-            updated_at: f.updated_at,
-            description: f.description.to_owned(),
-            image_url: f.image_url.to_owned()
-        }
-    }
-}

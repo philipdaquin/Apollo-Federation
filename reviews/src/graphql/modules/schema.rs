@@ -1,14 +1,19 @@
 use async_graphql::*;
 use async_graphql_actix_web::*;
+use chrono::NaiveDateTime;
 use super::resolver::{get_reviews, get_reviews_by_product, get_reviews_by_user, self};
 use crate::graphql::config::get_conn_from_ctx;
+use super::model::{Review, NewReview};
 
 #[derive(SimpleObject)]
 pub struct ReviewType { 
     pub id: ID,
     pub body: String,
     pub author: UserType,
-    pub product: ProductType 
+    pub product: ProductType,
+    pub heading: String, 
+    pub media: Option<String>,
+    pub is_edited: bool
 }
 
 pub struct UserType { 
@@ -75,4 +80,57 @@ impl QueryReviews  {
             .map(ReviewType::from)
             .collect()
     }
+}
+
+
+
+#[derive(Default)]
+pub struct MutationReviews;
+
+#[derive(InputObject, Clone, Debug)]
+pub struct NewReviewInput { 
+    pub body: String, 
+    pub author_id: ID, 
+    pub product_id: ID,
+    pub heading: Option<String>,
+    pub updated_at: Option<NaiveDateTime>,
+    pub media: Option<String>,
+    pub is_edited: Option<bool>
+}
+
+#[Object]
+impl MutationReviews { 
+    pub async fn create_new_review(&self, ctx: &Context<'_>, new_review: NewReviewInput) -> FieldResult<ReviewType> { 
+        let review = resolver::create_review(
+            NewReview::from(&new_review), 
+                &get_conn_from_ctx(ctx)).expect("");
+        Ok(ReviewType::from(&review))
+    }
+    pub async fn update_review(
+        &self, 
+        ctx: &Context<'_>, 
+        new_review: NewReviewInput,
+        review_id: ID, 
+        author_id: ID
+    ) -> FieldResult<ReviewType> { 
+        let parse = |x: ID| -> i32 { 
+            x.parse::<i32>().expect("ParseIntError")
+        };
+        let review = resolver::update_review(
+            NewReview::from(&new_review), 
+            parse(review_id), 
+            parse(author_id), 
+            &get_conn_from_ctx(ctx)
+        ).expect("");
+    
+        Ok(ReviewType::from(&review))
+
+    }
+    pub async fn delete_review(&self, ctx: &Context<'_>, review_id: ID) -> FieldResult<bool> { 
+        let id = review_id.parse::<i32>().expect("ParseIntError");
+        resolver::delete_review(id, &get_conn_from_ctx(ctx));
+
+        Ok(true)
+    }
+
 }
