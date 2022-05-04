@@ -100,12 +100,14 @@ pub struct NewReviewInput {
 
 #[Object]
 impl MutationReviews { 
+    #[graphql(name = "createReview")]
     pub async fn create_new_review(&self, ctx: &Context<'_>, new_review: NewReviewInput) -> FieldResult<ReviewType> { 
         let review = resolver::create_review(
             NewReview::from(&new_review), 
                 &get_conn_from_ctx(ctx)).expect("");
         Ok(ReviewType::from(&review))
     }
+    #[graphql(name = "updateReview")]
     pub async fn update_review(
         &self, 
         ctx: &Context<'_>, 
@@ -126,11 +128,11 @@ impl MutationReviews {
         Ok(ReviewType::from(&review))
 
     }
+    #[graphql(name = "deleteReview")]
     pub async fn delete_review(&self, ctx: &Context<'_>, review_id: ID) -> FieldResult<bool> { 
         let id = review_id.parse::<i32>().expect("ParseIntError");
-        resolver::delete_review(id, &get_conn_from_ctx(ctx));
-
-        Ok(true)
+        Ok(resolver::delete_review(
+            id, 
+            &get_conn_from_ctx(ctx))?)
     }
-
 }

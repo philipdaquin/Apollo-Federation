@@ -26,7 +26,8 @@ pub fn create_review(new_review: NewReview, conn: &PgConnection) -> QueryResult<
 
 pub fn delete_review(review_id: i32, conn: &PgConnection) -> QueryResult<bool> { 
     diesel::delete(review::table)
-        .filter(review::id.eq(review_id))
+        .filter(review::id.eq(review_id)
+    )
         .execute(conn)?;
     Ok(true)
 }
