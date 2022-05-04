@@ -42,3 +42,36 @@ query GetProductById($getProductByIdId: ID!) {
     imageUrl
   }
 }
+
+query GetProductsByCategory($category: String!) {
+  getProductsByCategory(category: $category) {
+    id
+    name
+    price
+    weight
+    category
+    createdBy
+    tags
+    createdAt
+    updatedAt
+    description
+    imageUrl
+  }
+}
+
+
+query GetProductsByTags($tag: String!) {
+  getProductsByTags(tag: $tag) {
+    id
+    name
+    price
+    weight
+    category
+    createdBy
+    tags
+    createdAt
+    updatedAt
+    description
+    imageUrl
+  }
+}

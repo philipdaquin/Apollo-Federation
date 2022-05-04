@@ -131,7 +131,6 @@ impl graphql_client::GraphQLQuery for GetAllProducts {
     }
 }
 
-
 pub struct GetProductById;
 pub mod product_query_by_id { 
     use super::*;
@@ -209,3 +208,154 @@ impl graphql_client::GraphQLQuery for GetProductById {
 }
 
 
+pub struct GetProductsByCategory;
+pub mod product_query_by_category { 
+    use super::*;
+    use chrono::NaiveDateTime;
+    pub const OPERATION_NAME: &str = "GetProductsByCategory";
+    pub const QUERY: & str = "
+        query {
+            \n  getProductsByCategory(id: $category) {
+                \n    
+                id\n    
+                name\n    
+                price\n    
+                weight\n    
+                category\n    
+                createdBy\n
+                tags\n    
+                createdAt\n    
+                updatedAt\n    
+                description\n    
+                imageUrl\n  }
+            \n
+        }
+        \n
+        \n";
+    use serde::{Deserialize, Serialize};
+    #[allow(dead_code)]
+    type Boolean = bool;
+    #[allow(dead_code)]
+    type Float = f64;
+    #[allow(dead_code)]
+    type Int = i32;
+    #[allow(dead_code)]
+    type ID = String;
+    type Date = NaiveDateTime;
+    /// No Variables in getAllUsers
+    #[derive(Serialize)]
+    pub struct Variables { 
+        #[serde(rename = "category")]
+        category: String
+    }
+
+    impl Variables {}
+    /// The Response in the Accounts Service
+    #[derive(Deserialize)]
+    pub struct ResponseData { 
+        #[serde(rename = "getProductsByCategory")]
+        pub product_id: Vec<ProductQueryByCategory>
+    }
+    #[derive(Deserialize)]
+    pub struct ProductQueryByCategory { 
+        pub id: ID, 
+        pub name: String,
+        pub price: Option<i32>, 
+        pub weight: Option<Int>,
+        pub category: Option<String>, 
+        pub created_by: Option<Int>,
+        pub tags: Option<String>,
+        pub created_at: Option<Date>,
+        pub updated_at: Option<Date>,
+        pub description: Option<String>,
+        pub image_url: Option<String>
+    }
+}
+impl graphql_client::GraphQLQuery for GetProductsByCategory { 
+    type Variables = product_query_by_category::Variables;
+    type ResponseData = product_query_by_category::ResponseData;
+    fn build_query(variables: Self::Variables) -> graphql_client::QueryBody<Self::Variables> {
+        use product_query_by_category::*;
+        graphql_client::QueryBody { 
+            variables,
+            query:  QUERY,
+            operation_name: OPERATION_NAME
+        }
+    }
+}
+
+pub struct GetProductsByTags;
+pub mod product_query_by_tags { 
+    use super::*;
+    use chrono::NaiveDateTime;
+    pub const OPERATION_NAME: &str = "GetProductsByTags";
+    pub const QUERY: & str = "
+        query {
+            \n  getProductsByTags(tag: $tag) {
+                \n    
+                id\n    
+                name\n    
+                price\n    
+                weight\n    
+                category\n    
+                createdBy\n
+                tags\n    
+                createdAt\n    
+                updatedAt\n    
+                description\n    
+                imageUrl\n  }
+            \n
+        }
+        \n
+        \n";
+    use serde::{Deserialize, Serialize};
+    #[allow(dead_code)]
+    type Boolean = bool;
+    #[allow(dead_code)]
+    type Float = f64;
+    #[allow(dead_code)]
+    type Int = i32;
+    #[allow(dead_code)]
+    type ID = String;
+    type Date = NaiveDateTime;
+    /// No Variables in getAllUsers
+    #[derive(Serialize)]
+    pub struct Variables { 
+        #[serde(rename = "tag")]
+        category: String
+    }
+
+    impl Variables {}
+    /// The Response in the Accounts Service
+    #[derive(Deserialize)]
+    pub struct ResponseData { 
+        #[serde(rename = "getProductsByTags")]
+        pub product_id: Vec<ProductQueryByTags>
+    }
+    #[derive(Deserialize)]
+    pub struct ProductQueryByTags { 
+        pub id: ID, 
+        pub name: String,
+        pub price: Option<i32>, 
+        pub weight: Option<Int>,
+        pub category: Option<String>, 
+        pub created_by: Option<Int>,
+        pub tags: Option<String>,
+        pub created_at: Option<Date>,
+        pub updated_at: Option<Date>,
+        pub description: Option<String>,
+        pub image_url: Option<String>
+    }
+}
+impl graphql_client::GraphQLQuery for GetProductsByTags { 
+    type Variables = product_query_by_tags::Variables;
+    type ResponseData = product_query_by_tags::ResponseData;
+    fn build_query(variables: Self::Variables) -> graphql_client::QueryBody<Self::Variables> {
+        use product_query_by_tags::*;
+        graphql_client::QueryBody { 
+            variables,
+            query:  QUERY,
+            operation_name: OPERATION_NAME
+        }
+    }
+}

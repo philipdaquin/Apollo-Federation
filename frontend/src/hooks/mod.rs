@@ -21,23 +21,40 @@ pub struct UserQuery;
     schema_path = "src/graphql/schema.graphql",
     query_path = "src/graphql/queries.graphql",
     response_derives = "Clone, PartialEq"
-
 )]
 pub struct GetAllProducts;
 
-
+/// Get Products ID
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "src/graphql/schema.graphql",
     query_path = "src/graphql/queries.graphql",
     response_derives = "Clone, PartialEq"
-
 )]
 pub struct GetProductById;
 
+///
+#[derive(GraphQLQuery)]
+#[graphql(
+    schema_path = "src/graphql/schema.graphql",
+    query_path = "src/graphql/queries.graphql",
+    response_derives = "Clone, PartialEq"
+)]
+pub struct GetProductsByCategory;
 
 
 
+////
+#[derive(GraphQLQuery)]
+#[graphql(
+    schema_path = "src/graphql/schema.graphql",
+    query_path = "src/graphql/queries.graphql",
+    response_derives = "Clone, PartialEq")]
+pub struct GetProductsByTags;
+
+
+
+////
 #[derive(Debug, Deserialize)]
 pub struct GraphQLResponse<T> {
     pub data: T,

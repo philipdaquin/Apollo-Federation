@@ -1,5 +1,5 @@
 use yew::{prelude::*, function_component, html, Html};
-use crate::hooks::{use_query::use_query, UserQuery, user_query};
+use crate::hooks::{user_query};
 use crate::models::user::UserInfo;
 use crate::components::{
     header::HeaderObject,
