@@ -1,1 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+.single_pro_image  { 
+    width: 40%;
+    margin-right: 50px;
+    
+}
+
+.small_img_group { 
+    display: flex;
+    justify-content: space-between;
+}
+
+.small_img_col{ 
+    flex-basis: 24%;
+    cursor: pointer;
+}

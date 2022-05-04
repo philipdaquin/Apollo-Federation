@@ -41,8 +41,7 @@ pub fn product_review(PreviewProp { product_id, show_tags}: &PreviewProp) -> Htm
         <>
             <div class="featured__container bd-grid">
                 <article class = "sneaker">
-                    <div hidden={!
-                        *show_tags} class="sneaker__sale">{"Sale"}</div>
+                    <div hidden={!*show_tags} class="sneaker__sale">{"Sale"}</div>
 
                     <Link<AppRoute> to={AppRoute::ProductPage {id: *product_id}}>
                         <img src={info.image_url.clone()} class="sneaker__img" alt=""/>
