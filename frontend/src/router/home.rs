@@ -3,58 +3,65 @@ use crate::hooks::{use_query::use_query, UserQuery, user_query};
 use crate::models::user::UserInfo;
 use crate::components::{
     header::HeaderObject,
-    feature::FeatureObject,
     collection::ColletionObject,
     womens::WomensObject,
     newsletter::NewsletterObject,
-    productlist::Productlist
+    product_list::Productlist,
+    product_review::ProductReview
 
 };
 
 #[function_component(Home)]
 pub fn home_page() -> Html {
-    let variables = user_query::Variables {};
-    let get_all_users  = use_query::<UserQuery>(variables);
+    // let variables = user_query::Variables {};
+    // let get_all_users  = use_query::<UserQuery>(variables);
     
-    if get_all_users.data.is_none() { 
-        return html! {
-            <>
-                <h1>{"Query Failed!"}</h1>
-            </>
-        }
-    }
+    // if get_all_users.data.is_none() { 
+    //     return html! {
+    //         <>
+    //             <h1>{"Query Failed!"}</h1>
+    //         </>
+    //     }
+    // }
 
-    let queried_results: Vec<UserInfo> = get_all_users  
-        .data
-        .unwrap()
-        .get_all_users
-        .iter()
-        .map(|user| UserInfo::from(user))
-        .collect();
+    // let queried_results: Vec<UserInfo> = get_all_users  
+    //     .data
+    //     .unwrap()
+    //     .get_all_users
+    //     .iter()
+    //     .map(|user| UserInfo::from(user))
+    //     .collect();
     
-    let user_info = queried_results
-        .iter()
-        .map(|info| { 
-            return html! { 
-                <>
-                    <div>
-                        <h1>{info.id}</h1>
-                        <h1>{info.first_name.clone()}</h1>
-                        <h3>{info.username.clone()}</h3>
-                        <h3>{info.password.clone()}</h3>
-                        <h3>{info.email.clone()}</h3>
-                        <h3>{info.joined_at.clone()}</h3>
-                    </div>
-                </>
-            }
-        }).collect::<Vec<Html>>();
+    // let user_info = queried_results
+    //     .iter()
+    //     .map(|info| { 
+    //         return html! { 
+    //             <>
+    //                 <div>
+    //                     <h1>{info.id}</h1>
+    //                     <h1>{info.first_name.clone()}</h1>
+    //                     <h3>{info.username.clone()}</h3>
+    //                     <h3>{info.password.clone()}</h3>
+    //                     <h3>{info.email.clone()}</h3>
+    //                     <h3>{info.joined_at.clone()}</h3>
+    //                 </div>
+    //             </>
+    //         }
+    //     }).collect::<Vec<Html>>();
 
     html! {
         <>
             <section>
-                <Productlist/>
+
                 <HeaderObject/>
-                <FeatureObject/>
+                <section class="featured section" id="featured">
+                    <h2 class="section-title">{"FEATURED"}</h2>
+                    <div class="featured__container bd-grid">
+                        <ProductReview product_id={4} show_tags={true}/>
+                        <ProductReview product_id={5} show_tags={true}/>
+                        <ProductReview product_id={6} show_tags={true}/>
+                    </div>
+                </section>
                 <ColletionObject/>
                 <WomensObject/>
                 <section class="offer section">

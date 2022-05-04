@@ -1,3 +1,4 @@
+# Query All Users 
 query UserQuery {
   getAllUsers {
     id
@@ -9,7 +10,7 @@ query UserQuery {
     joinedAt
   }
 }
-
+# Query All Product
 query GetAllProducts {
   getAllProducts {
     id
@@ -25,5 +26,19 @@ query GetAllProducts {
     imageUrl
   }
 }
-
-
+# Query Product By Id
+query GetProductById($getProductByIdId: ID!) {
+  getProductById(id: $getProductByIdId) {
+    id
+    name
+    price
+    weight
+    category
+    createdBy
+    tags
+    createdAt
+    updatedAt
+    description
+    imageUrl
+  }
+}

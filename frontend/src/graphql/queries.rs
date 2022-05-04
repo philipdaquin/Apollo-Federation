@@ -75,6 +75,7 @@ pub mod product_query {
                 price\n    
                 weight\n    
                 category\n    
+                createdBy\n
                 tags\n    
                 createdAt\n    
                 updatedAt\n    
@@ -122,6 +123,83 @@ impl graphql_client::GraphQLQuery for GetAllProducts {
     type ResponseData = product_query::ResponseData;
     fn build_query(variables: Self::Variables) -> graphql_client::QueryBody<Self::Variables> {
         use product_query::*;
+        graphql_client::QueryBody { 
+            variables,
+            query:  QUERY,
+            operation_name: OPERATION_NAME
+        }
+    }
+}
+
+
+pub struct GetProductById;
+pub mod product_query_by_id { 
+    use super::*;
+    use chrono::NaiveDateTime;
+    pub const OPERATION_NAME: &str = "GetProductById";
+    pub const QUERY: & str = "
+        query {
+            \n  getProductById(id: $getProductByIdId) {
+                \n    
+                id\n    
+                name\n    
+                price\n    
+                weight\n    
+                category\n    
+                createdBy\n
+                tags\n    
+                createdAt\n    
+                updatedAt\n    
+                description\n    
+                imageUrl\n  }
+            \n
+        }
+        \n
+        \n";
+    use serde::{Deserialize, Serialize};
+    #[allow(dead_code)]
+    type Boolean = bool;
+    #[allow(dead_code)]
+    type Float = f64;
+    #[allow(dead_code)]
+    type Int = i32;
+    #[allow(dead_code)]
+    type ID = String;
+    type Date = NaiveDateTime;
+    /// No Variables in getAllUsers
+    #[derive(Serialize)]
+    pub struct Variables { 
+        #[serde(rename = "getProductByIdId")]
+        product_id: ID
+    }
+
+    impl Variables {}
+    /// The Response in the Accounts Service
+    #[derive(Deserialize)]
+    pub struct ResponseData { 
+        #[serde(rename = "getProductById")]
+        pub product_id: ProductQueryById
+    }
+    #[derive(Deserialize)]
+    pub struct ProductQueryById { 
+        pub id: ID, 
+        pub name: String,
+        pub price: Option<i32>, 
+        pub weight: Option<Int>,
+        pub category: Option<String>, 
+        pub created_by: Option<Int>,
+        pub tags: Option<String>,
+        pub created_at: Option<Date>,
+        pub updated_at: Option<Date>,
+        pub description: Option<String>,
+        pub image_url: Option<String>
+    }
+}
+impl graphql_client::GraphQLQuery for GetProductById { 
+    type Variables = product_query_by_id::Variables;
+    type ResponseData = product_query_by_id::ResponseData;
+    fn build_query(variables: Self::Variables) -> graphql_client::QueryBody<Self::Variables> {
+        use product_query_by_id::*;
         graphql_client::QueryBody { 
             variables,
             query:  QUERY,

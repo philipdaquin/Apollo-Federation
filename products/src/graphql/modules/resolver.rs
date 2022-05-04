@@ -20,6 +20,14 @@ pub fn create_product(new_product: NewProduct, conn: &PgConnection) -> QueryResu
         .get_result::<Product>(conn)
 }
 
+pub fn filter_by_category(category: String, conn: &PgConnection) -> QueryResult<Vec<Product>> { 
+    products::table.filter(products::category.eq(category)).load(conn)
+}
+
+pub fn filter_by_tags(tags: String, conn: &PgConnection) -> QueryResult<Vec<Product>> { 
+    products::table.filter(products::tags.eq(tags)).load(conn)
+}
+
 pub fn update_product(
     product_id: i32, 
     user_id: i32, 

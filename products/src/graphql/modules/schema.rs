@@ -61,6 +61,11 @@ impl QueryProducts {
             .map(|f| ProductType::from(f))
             .collect()
     }
+    #[graphql(name = "getProductById")]
+    pub async fn get_product_by_id(&self, ctx: &Context<'_>, id: ID) -> Option<ProductType> { 
+        find_product_by_id_internal(ctx, id)
+    }
+
     /// Reference Resolver 
     #[graphql(entity)]
     pub async fn find_product_by_id(&self, ctx: &Context<'_>, id: ID) -> Option<ProductType> { 
@@ -74,6 +79,24 @@ impl QueryProducts {
         }  = find_product_by_id_internal(ctx, id).unwrap(); 
         Some(price.unwrap_or_default() * weight.unwrap_or_default())
     } 
+    #[graphql(name = "getProductsByCategory")]
+    pub async fn get_by_category(&self, ctx: &Context<'_>, category: String) -> FieldResult<Vec<ProductType>> { 
+        Ok(resolver::filter_by_category(category, &get_conn_from_ctx(ctx))
+            .expect("")
+            .iter()
+            .map(|f| ProductType::from(f))
+            .collect()
+        )
+    }
+    #[graphql(name = "getProductsByTags")]
+    pub async fn get_by_tags(&self, ctx: &Context<'_>, tag: String) -> FieldResult<Vec<ProductType>> { 
+        Ok(resolver::filter_by_tags(tag, &get_conn_from_ctx(ctx))
+            .expect("")
+            .iter()
+            .map(|f| ProductType::from(f))
+            .collect()
+        )
+    }
     #[graphql(entity)]
     pub async fn find_user_by_id(&self, #[graphql(key)] id: ID) -> UserType { 
         UserType { id }

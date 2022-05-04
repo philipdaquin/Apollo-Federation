@@ -26,6 +26,15 @@ pub struct UserQuery;
 pub struct GetAllProducts;
 
 
+#[derive(GraphQLQuery)]
+#[graphql(
+    schema_path = "src/graphql/schema.graphql",
+    query_path = "src/graphql/queries.graphql",
+    response_derives = "Clone, PartialEq"
+
+)]
+pub struct GetProductById;
+
 
 
 

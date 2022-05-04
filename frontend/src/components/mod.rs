@@ -1,8 +1,8 @@
 pub mod navbar;
 pub mod footer;
 pub mod header;
-pub mod feature;
 pub mod collection;
 pub mod womens;
 pub mod newsletter;
-pub mod productlist;
+pub mod product_list;
+pub mod product_review;

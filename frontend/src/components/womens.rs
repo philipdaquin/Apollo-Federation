@@ -1,7 +1,12 @@
 use yew::{prelude::*, function_component, html, Html};
 
+
 #[function_component(WomensObject)]
 pub fn woments_object() -> Html {
+
+
+
+
     html! {
         <>
             <section class="women section" id="women">
