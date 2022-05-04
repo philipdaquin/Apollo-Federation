@@ -96,6 +96,8 @@ type Query {
   getAllProducts: [ProductType!]!
   getProductById(id: ID!): ProductType
   getShippingEstimate(id: ID!): Int
+  getProductsByCategory(category: String!): [ProductType!]!
+  getProductsByTags(tag: String!): [ProductType!]!
   getReviews: [ReviewType!]!
 }
 
