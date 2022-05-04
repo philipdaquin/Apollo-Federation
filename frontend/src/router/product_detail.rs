@@ -69,6 +69,11 @@ pub fn product_detail(ProductProps {id}: &ProductProps ) -> Html {
                         </div>
                     </div>
                 </div>
+                <div class="single_pro_details">
+                    <h6>{name.clone()}</h6>
+                    <h4>{description.clone().unwrap()}</h4>
+                    <h2>{format!("${}", price.clone().unwrap())}</h2>
+                </div>
             </section>
         </>
     }
