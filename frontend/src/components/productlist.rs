@@ -16,7 +16,6 @@ pub fn product_list() -> Html {
         return html! {
             <>
                 <h1>{"Query Failed!"}</h1>
-
             </>
         }
     }
@@ -36,8 +35,7 @@ pub fn product_list() -> Html {
                 <>
                     <div>
                         <h1>{info.id.clone()}</h1>
-                        
-                        
+                        <h1>{info.name.clone()}</h1>
                     </div>
                 </>
             }

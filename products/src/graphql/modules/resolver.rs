@@ -28,8 +28,7 @@ pub fn update_product(
 ) -> QueryResult<Product> { 
     //  Select Table and filter by user_id and find the product_id 
     diesel::update(
-        products::table
-        .filter(products::created_by.eq(user_id))
+        products::table.filter(products::created_by.eq(user_id))
         .find(product_id)
     )
     .set(new_product)

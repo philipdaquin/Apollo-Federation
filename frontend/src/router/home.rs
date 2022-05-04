@@ -52,7 +52,7 @@ pub fn home_page() -> Html {
     html! {
         <>
             <section>
-            {user_info}
+                <Productlist/>
                 <HeaderObject/>
                 <FeatureObject/>
                 <ColletionObject/>
