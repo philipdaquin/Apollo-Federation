@@ -15,7 +15,8 @@ pub struct Review {
     pub updated_at: Option<NaiveDateTime>,
     pub media: Option<String>,
     pub is_edited: Option<bool>,
-    pub created_at: Option<NaiveDateTime>
+    pub created_at: Option<NaiveDateTime>,
+    pub user_rating: Option<i32>
 }
 
 #[derive(Debug, Clone, Insertable, AsChangeset)]
@@ -27,7 +28,8 @@ pub struct NewReview {
     pub heading: Option<String>,
     pub updated_at: Option<NaiveDateTime>,
     pub media: Option<String>,
-    pub is_edited: Option<bool>
+    pub is_edited: Option<bool>,
+    pub user_rating: Option<i32>
 }
 
 /// Read Database type into Graphql type 
@@ -40,7 +42,8 @@ impl From<&Review> for ReviewType {
             product: ProductType::new(g.product_id.clone()),
             heading: g.heading.clone().unwrap(),
             media: g.media.clone(),
-            is_edited: g.is_edited.unwrap_or(false)
+            is_edited: g.is_edited.unwrap_or(false),
+            user_rating: g.user_rating
         }
     }
 }
@@ -54,7 +57,8 @@ impl From<&NewReviewInput> for NewReview {
             heading: f.heading.clone(), 
             updated_at: f.updated_at.clone(),
             media: f.media.clone(),
-            is_edited: f.is_edited.clone()
+            is_edited: f.is_edited.clone(),
+            user_rating: f.user_rating.clone()
         }
     }
 }

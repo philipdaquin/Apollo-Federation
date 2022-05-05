@@ -13,7 +13,8 @@ pub struct ReviewType {
     pub product: ProductType,
     pub heading: String, 
     pub media: Option<String>,
-    pub is_edited: bool
+    pub is_edited: bool,
+    pub user_rating: Option<i32>
 }
 
 pub struct UserType { 
@@ -45,7 +46,7 @@ impl ProductType {
     pub async fn id(&self) -> &ID { 
         &self.id
     }    
-    #[graphql(name = "getProductReviews")]
+    #[graphql(name = "getProductReviewsByID")]
     pub async fn reviews(&self, ctx: &Context<'_>,  id: ID) -> Vec<ReviewType> { 
         let id = id.parse::<i32>().expect("");
         resolver::get_reviews_by_product(id, &get_conn_from_ctx(ctx))
@@ -61,6 +62,18 @@ pub struct QueryReviews;
 
 #[Object]
 impl QueryReviews  {
+
+    /// Query Reviews under Product Details 
+    #[graphql(entity)]
+    pub async fn get_reviews_by_product(&self, ctx: &Context<'_>, product_id: ID) -> Vec<ReviewType> { 
+        let product_id = product_id.parse::<i32>().expect("");
+
+        resolver::get_reviews_by_product(product_id, &get_conn_from_ctx(ctx))
+            .expect("")
+            .iter()
+            .map(ReviewType::from)
+            .collect()
+    }
     ///  Insert reference resolvers 
     ///  entities
     #[graphql(entity)]
@@ -95,7 +108,8 @@ pub struct NewReviewInput {
     pub heading: Option<String>,
     pub updated_at: Option<NaiveDateTime>,
     pub media: Option<String>,
-    pub is_edited: Option<bool>
+    pub is_edited: Option<bool>,
+    pub user_rating: Option<i32>
 }
 
 #[Object]

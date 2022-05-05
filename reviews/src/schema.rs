@@ -9,5 +9,6 @@ table! {
         media -> Nullable<Varchar>,
         is_edited -> Nullable<Bool>,
         created_at -> Nullable<Timestamp>,
+        user_rating -> Nullable<Int4>,
     }
 }
