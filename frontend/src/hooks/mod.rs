@@ -60,7 +60,7 @@ pub struct GetProductsByTags;
     schema_path = "src/graphql/schema.graphql",
     query_path = "src/graphql/queries.graphql",
     response_derives = "Clone, PartialEq")]
-pub struct GetProductByIdWithReviews;
+pub struct GetReviewsOfAnyProductId;
 
 
 

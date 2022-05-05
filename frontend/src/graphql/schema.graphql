@@ -93,6 +93,12 @@ type Query {
   getShippingEstimate(id: ID!): Int
   getProductsByCategory(category: String!): [ProductType!]!
   getProductsByTags(tag: String!): [ProductType!]!
+
+  """
+  Target any product Id and load all the reviews under it
+  This will stay independent on its own without being nested under the ProductType
+  """
+  getReviewsOfAnyProductId(productId: ID!): [ReviewType!]!
   getReviews: [ReviewType!]!
 }
 

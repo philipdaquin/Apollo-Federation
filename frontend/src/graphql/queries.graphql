@@ -76,3 +76,19 @@ query GetProductsByTags($tag: String!) {
     imageUrl
   }
 }
+
+# Query Product Details with Reviews 
+query GetReviewsOfAnyProductId($productId: ID!) {
+  getReviewsOfAnyProductId(productId: $productId) {
+    id
+    body
+    author {
+      id
+      username
+    }
+    heading
+    media
+    isEdited
+    userRating
+  }
+}

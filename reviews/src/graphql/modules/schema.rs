@@ -63,8 +63,9 @@ pub struct QueryReviews;
 #[Object]
 impl QueryReviews  {
 
-    /// Query Reviews under Product Details 
-    #[graphql(entity)]
+    /// Target any product Id and load all the reviews under it 
+    /// This will stay independent on its own without being nested under the ProductType 
+    #[graphql(name = "getReviewsOfAnyProductId")]
     pub async fn get_reviews_by_product(&self, ctx: &Context<'_>, product_id: ID) -> Vec<ReviewType> { 
         let product_id = product_id.parse::<i32>().expect("");
 

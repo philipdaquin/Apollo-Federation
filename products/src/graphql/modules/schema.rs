@@ -50,8 +50,6 @@ impl UserType {
 }
 
 
-
-
 #[Object(extends)]
 impl QueryProducts { 
 
