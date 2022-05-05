@@ -43,36 +43,107 @@ pub fn product_detail(ProductProps {id}: &ProductProps ) -> Html {
         image_url
     } = ProductID::from(&queries_result);
 
-    
+    let on_click = { 
+        // add class product-img > img 
+    };
+
 
     html! {
         <>
-            <section class="product__details">
-                <div class="single_pro_image">
-                    <img src="https://media.gq.com/photos/5a7d0307463e0e0b7680173c/master/w_960%2Cc_limit/180207_NYFWMFW18-18_DR13-9741-2.jpg" alt="" width="100%" />
-
-                    <div class="small_img_group">
-                        <div class="small_img_col">
-                            <img src="https://media.gq.com/photos/5a7d0307463e0e0b7680173c/master/w_960%2Cc_limit/180207_NYFWMFW18-18_DR13-9741-2.jpg" alt="" width= "" class ="small_img"/>
-                        </div>
-                        <div class="small_img_col">
-                            <img src="https://media.gq.com/photos/5a7d0307463e0e0b7680173c/master/w_960%2Cc_limit/180207_NYFWMFW18-18_DR13-9741-2.jpg" alt="" width= "" class ="small_img"/>
-                        </div>
-                        <div class="small_img_col">
-                            <img src="https://media.gq.com/photos/5a7d0307463e0e0b7680173c/master/w_960%2Cc_limit/180207_NYFWMFW18-18_DR13-9741-2.jpg" alt="" width= "" class ="small_img"/>
-                        </div>
-                        <div class="small_img_col">
-                            <img src="https://media.gq.com/photos/5a7d0307463e0e0b7680173c/master/w_960%2Cc_limit/180207_NYFWMFW18-18_DR13-9741-2.jpg" alt="" width= "" class ="small_img"/>
-                        </div>
-                        <div class="small_img_col">
-                            <img src="https://media.gq.com/photos/5a7d0307463e0e0b7680173c/master/w_960%2Cc_limit/180207_NYFWMFW18-18_DR13-9741-2.jpg" alt="" width= "" class ="small_img"/>
+            <section class="bd-grid">
+                <div class="container">
+                    <div class="box">
+                        <div class="breadcumb">
+                            <a href="">{"Home"}</a>
+                            <span><i class="bx bxs-chevrons-right"></i></span>
+                            <a href="">{"All Products"}</a>
+                            <span><i class="bx bxs-chevrons-right"></i></span>
+                            <a href="">{"Nike Shoes"}</a>
+                            <span><i class="bx bxs-chevrons-right"></i></span>
                         </div>
                     </div>
-                </div>
-                <div class="single_pro_details">
-                    <h6>{name.clone()}</h6>
-                    <h4>{description.clone().unwrap()}</h4>
-                    <h2>{format!("${}", price.clone().unwrap())}</h2>
+                    <div class="row product-row">
+                        <div class="col-5 cold-md-12">
+                            <div class="product-img" id="product-img">
+                                <img src="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/fb7eda3c-5ac8-4d05-a18f-1c2c5e82e36e/blazer-mid-77-vintage-shoe-CBDjT0.png" alt=""/>
+                            </div>
+                            <div class="box">
+                                <div class="product-img-list">
+                                    <div class="product-img-item">
+                                        <img src="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/e1f4280c-7c89-4c5f-a4c9-67e3ab698051/blazer-mid-77-vintage-womens-shoes-25h71W.png" alt=""/>
+                                    </div>
+                                    <div class="product-img-item">
+                                        <img src="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/fb7eda3c-5ac8-4d05-a18f-1c2c5e82e36e/blazer-mid-77-vintage-mens-shoes-nw30B2.png" alt=""/>
+                                    </div>
+                                    <div class="product-img-item">
+                                        <img src="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/e1f4280c-7c89-4c5f-a4c9-67e3ab698051/blazer-mid-77-vintage-womens-shoes-25h71W.png" alt=""/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-7 col-md-12">
+                            <div class="product-info">
+                                <h1>
+                                    {"NIKE SHOES"}
+                                </h1>
+                                <div class="product-info-detail">
+                                    <span class="product-info-detail-title">{"BRAND"}</span>
+                                    <a href="">{"NIKE"}</a>
+                                </div>
+                                <div class="product-info-detail">
+                                    <span class="product-info-detail-title">{"RATED"}</span>
+                                    <span class="rating">
+                                        <i class="bx bxs-star"></i>
+                                        <i class="bx bxs-star"></i>
+                                        <i class="bx bxs-star"></i>
+                                        <i class="bx bxs-star"></i>
+                                        <i class="bx bxs-star"></i>
+                                    </span>
+                                </div>
+                                <p class="product-description">
+                                {"Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+                                Veritatis cupiditate, sint alias officiis ipsum modi at nesciunt quos 
+                                dolorum dolores vero nemo quaerat necessitatibus dicta culpa tenetur magnam, 
+                                autem dignissimos."}</p>
+                                <div class="product-info-price">{"$2345"}</div>
+                                <div class="product-quantity-wrapper">
+                                    <span class="product-quantity-btn">
+                                        <i class="bx bx-minus"></i>
+                                    </span>
+                                    <span class="product-quantity">{"1"}</span>
+                                    <span class="product-quantity-btn">
+                                        <i class="bx bx-plus"></i>
+                                    </span>
+                                </div>
+                                <div>
+                                    <button class="btn-flat btn-hover">{"Add to Card"}</button>
+                                </div>
+                                <div class="box">
+                                    <div class="box-header">
+                                        {"Description"}
+                                    </div>
+                                    <div class="product-detail-description">
+                                        <button class="btn-flat btn-hover btn-view-description">
+                                            {"View All"}
+                                        </button>
+                                        <div class="product-detaul-description-content">
+                                            <p>
+                                                {"Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut, vero."}
+                                            </p>
+                                            <img src="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/e1f4280c-7c89-4c5f-a4c9-67e3ab698051/blazer-mid-77-vintage-womens-shoes-25h71W.png" alt=""/>
+                                            <p>
+                                                {"Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut, vero."}
+                                            </p>
+                                            <img src="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/e1f4280c-7c89-4c5f-a4c9-67e3ab698051/blazer-mid-77-vintage-womens-shoes-25h71W.png" alt=""/>
+                                            <p>
+                                                {"Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut, vero."}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                
                 </div>
             </section>
         </>

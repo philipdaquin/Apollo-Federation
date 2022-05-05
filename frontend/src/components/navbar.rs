@@ -17,7 +17,7 @@ pub fn navbar() -> Html {
                     <div class="nav__menu" id="nav-menu">
                         <ul class="nav__list">
                             <li><Link<AppRoute> to={AppRoute::Home} classes={"nav__link"}>{"Home"}</Link<AppRoute>></li>
-                            <li><Link<AppRoute> to={AppRoute::FeaturePage} classes={"nav__link"}>{" Feature"}</Link<AppRoute>></li>
+                            <li><Link<AppRoute> to={AppRoute::FeaturePage} classes={"nav__link"}>{"All Products"}</Link<AppRoute>></li>
                             // <Link<AppRoute> to={AppRoute::Feature} classes={"nav__link"}>{"Feature"}</Link<AppRoute>>
                             // <Link<AppRoute> to={AppRoute::Mens} classes={"nav__link"}>{"Mens"}</Link<AppRoute>>
                             // <Link<AppRoute> to={AppRoute::Womens} classes={"nav__link"}>{"Womens"}</Link<AppRoute>>
