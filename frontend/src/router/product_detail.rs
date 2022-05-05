@@ -65,7 +65,7 @@ pub fn product_detail(ProductProps {id}: &ProductProps ) -> Html {
                     <div class="row product-row">
                         <div class="col-5 cold-md-12">
                             <div class="product-img" id="product-img">
-                                <img src="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/fb7eda3c-5ac8-4d05-a18f-1c2c5e82e36e/blazer-mid-77-vintage-shoe-CBDjT0.png" alt=""/>
+                                <img src={image_url.clone()} alt=""/>
                             </div>
                             <div class="box">
                                 <div class="product-img-list">
@@ -146,94 +146,6 @@ pub fn product_detail(ProductProps {id}: &ProductProps ) -> Html {
                                         {"Review"}
                                     </div>
                                     <div>
-                                        <div class="user-rate">
-                                            <div class="user-info">
-                                                <div class="user-avt">
-                                                    <img src="https://imageio.forbes.com/specials-images/imageserve/61578d13c3a591704133bc40/Header-TrumpL-1x1/0x0.gif?format=gif&height=1080&width=1080&fit=crop" alt=""/>
-                                                </div>
-                                                <div class="user-name">
-                                                <span class="name">{"Donald Trumpet"}</span>
-                                                    <span class="rating">
-                                                        <i class="bx bxs-star"></i>
-                                                        <i class="bx bxs-star"></i>
-                                                        <i class="bx bxs-star"></i>
-                                                        <i class="bx bxs-star"></i>
-                                                        <i class="bx bxs-star"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="user-rate-content">
-                                                {"Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                                 Distinctio ea iste, veritatis nobis amet illum, cum alias magni dolores odio, 
-                                                 eius quo excepturi veniam ipsa voluptatibus natus voluptas vero? Aspernatur!"}
-                                            </div>
-                                        </div>
-                                        <div class="user-rate">
-                                            <div class="user-info">
-                                                <div class="user-avt">
-                                                    <img src="https://imageio.forbes.com/specials-images/imageserve/61578d13c3a591704133bc40/Header-TrumpL-1x1/0x0.gif?format=gif&height=1080&width=1080&fit=crop" alt=""/>
-                                                </div>
-                                                <div class="user-name">
-                                                <span class="name">{"Donald Trumpet"}</span>
-                                                    <span class="rating">
-                                                        <i class="bx bxs-star"></i>
-                                                        <i class="bx bxs-star"></i>
-                                                        <i class="bx bxs-star"></i>
-                                                        <i class="bx bxs-star"></i>
-                                                        <i class="bx bxs-star"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="user-rate-content">
-                                                {"Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                                 Distinctio ea iste, veritatis nobis amet illum, cum alias magni dolores odio, 
-                                                 eius quo excepturi veniam ipsa voluptatibus natus voluptas vero? Aspernatur!"}
-                                            </div>
-                                        </div>
-                                        <div class="user-rate">
-                                            <div class="user-info">
-                                                <div class="user-avt">
-                                                    <img src="https://imageio.forbes.com/specials-images/imageserve/61578d13c3a591704133bc40/Header-TrumpL-1x1/0x0.gif?format=gif&height=1080&width=1080&fit=crop" alt=""/>
-                                                </div>
-                                                <div class="user-name">
-                                                <span class="name">{"Donald Trumpet"}</span>
-                                                    <span class="rating">
-                                                        <i class="bx bxs-star"></i>
-                                                        <i class="bx bxs-star"></i>
-                                                        <i class="bx bxs-star"></i>
-                                                        <i class="bx bxs-star"></i>
-                                                        <i class="bx bxs-star"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="user-rate-content">
-                                                {"Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                                 Distinctio ea iste, veritatis nobis amet illum, cum alias magni dolores odio, 
-                                                 eius quo excepturi veniam ipsa voluptatibus natus voluptas vero? Aspernatur!"}
-                                            </div>
-                                        </div>
-                                        <div class="user-rate">
-                                            <div class="user-info">
-                                                <div class="user-avt">
-                                                    <img src="https://imageio.forbes.com/specials-images/imageserve/61578d13c3a591704133bc40/Header-TrumpL-1x1/0x0.gif?format=gif&height=1080&width=1080&fit=crop" alt=""/>
-                                                </div>
-                                                <div class="user-name">
-                                                <span class="name">{"Donald Trumpet"}</span>
-                                                    <span class="rating">
-                                                        <i class="bx bxs-star"></i>
-                                                        <i class="bx bxs-star"></i>
-                                                        <i class="bx bxs-star"></i>
-                                                        <i class="bx bxs-star"></i>
-                                                        <i class="bx bxs-star"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="user-rate-content">
-                                                {"Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                                 Distinctio ea iste, veritatis nobis amet illum, cum alias magni dolores odio, 
-                                                 eius quo excepturi veniam ipsa voluptatibus natus voluptas vero? Aspernatur!"}
-                                            </div>
-                                        </div>
                                         <div class="box">
                                             <ul class="pagination">
                                                 <li><a href="#"><i class="bx bxs-chevron-left"></i></a></li>

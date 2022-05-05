@@ -33,7 +33,6 @@ pub struct ProductType {
 pub struct UserType { 
     pub id: ID
 }
-
 #[Object(extends)]
 impl UserType { 
     #[graphql(external)]
@@ -50,8 +49,17 @@ impl UserType {
     }
 }
 
+
+
+
 #[Object(extends)]
 impl QueryProducts { 
+
+    /// Reference Resolver for Products
+    #[graphql(entity)]
+    pub async fn find_product_by_id(&self, ctx: &Context<'_>, id: ID) -> Option<ProductType> { 
+        find_product_by_id_internal(ctx, id)
+    }
     /// Get all products found inside the Database
     #[graphql(name = "getAllProducts")]
     pub async fn get_all(&self, ctx: &Context<'_>) -> Vec<ProductType> { 
@@ -66,11 +74,7 @@ impl QueryProducts {
         find_product_by_id_internal(ctx, id)
     }
 
-    /// Reference Resolver 
-    #[graphql(entity)]
-    pub async fn find_product_by_id(&self, ctx: &Context<'_>, id: ID) -> Option<ProductType> { 
-        find_product_by_id_internal(ctx, id)
-    }
+   
     #[graphql(name = "getShippingEstimate")]
     pub async fn shipping_estimate(&self, ctx: &Context<'_>, id: ID) -> Option<i32> { 
         let ProductType { 

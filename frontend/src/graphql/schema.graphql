@@ -11,26 +11,20 @@ type Mutation {
   updateUserDetails(newUser: NewUserInput!, id: ID!): UserType!
   loginUser(login: UserLogin!): String!
   createNewProduct(newProduct: NewProductInput!): ProductType
-  updateProduct(
-    productId: ID!
-    userId: ID!
-    newInput: NewProductInput!
-  ): ProductType
+  updateProduct(productId: ID!, userId: ID!, newInput: NewProductInput!): ProductType
   deleteProduct(productId: ID!): Boolean!
   createReview(newReview: NewReviewInput!): ReviewType!
-  updateReview(
-    newReview: NewReviewInput!
-    reviewId: ID!
-    authorId: ID!
-  ): ReviewType!
+  updateReview(newReview: NewReviewInput!, reviewId: ID!, authorId: ID!): ReviewType!
   deleteReview(reviewId: ID!): Boolean!
 }
 
-# ISO 8601 combined date and time without timezone.
-#
-# # Examples
-#
-# * `2015-07-01T08:59:60.123`,
+"""
+ISO 8601 combined date and time without timezone.
+
+# Examples
+
+* `2015-07-01T08:59:60.123`,
+"""
 scalar NaiveDateTime
 
 input NewProductInput {
@@ -41,7 +35,7 @@ input NewProductInput {
   createdBy: Int
   tags: String
 
-  # users should not be able tto change the time manually
+  """users should not be able tto change the time manually"""
   createdAt: NaiveDateTime
   updatedAt: NaiveDateTime
   description: String
@@ -56,6 +50,7 @@ input NewReviewInput {
   updatedAt: NaiveDateTime
   media: String
   isEdited: Boolean
+  userRating: Int
 }
 
 input NewUserInput {
@@ -67,14 +62,14 @@ input NewUserInput {
   role: Role!
 }
 
-# The Price Type in our System
+"""The Price Type in our System"""
 type ProductType {
   id: ID!
   shippingEstimate: Int
   getByProductId: InventoryType
   name: String!
 
-  # Price attribute can be Zero
+  """Price attribute can be Zero"""
   price: Int
   weight: Int
   category: String
@@ -84,7 +79,7 @@ type ProductType {
   updatedAt: NaiveDateTime
   description: String
   imageUrl: String
-  getProductReviews(id: ID!): [ReviewType!]!
+  getProductReviewsByID(id: ID!): [ReviewType!]!
 }
 
 type Query {
@@ -92,7 +87,7 @@ type Query {
   getUserById(id: ID!): UserType
   getAllInventory: [InventoryType!]!
 
-  # Get all products found inside the Database
+  """Get all products found inside the Database"""
   getAllProducts: [ProductType!]!
   getProductById(id: ID!): ProductType
   getShippingEstimate(id: ID!): Int
@@ -109,6 +104,7 @@ type ReviewType {
   heading: String!
   media: String
   isEdited: Boolean!
+  userRating: Int
 }
 
 enum Role {

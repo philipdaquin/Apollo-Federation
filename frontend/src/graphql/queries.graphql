@@ -43,6 +43,8 @@ query GetProductById($getProductByIdId: ID!) {
   }
 }
 
+# Filtering Products by: 
+# Get Products By Category 
 query GetProductsByCategory($category: String!) {
   getProductsByCategory(category: $category) {
     id
@@ -58,8 +60,7 @@ query GetProductsByCategory($category: String!) {
     imageUrl
   }
 }
-
-
+# Get Products By Tags
 query GetProductsByTags($tag: String!) {
   getProductsByTags(tag: $tag) {
     id

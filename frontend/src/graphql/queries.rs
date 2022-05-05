@@ -359,3 +359,116 @@ impl graphql_client::GraphQLQuery for GetProductsByTags {
         }
     }
 }
+
+pub struct GetProductByIdWithReviews;
+pub mod product_query_with_reviews { 
+    use super::*;
+    use chrono::NaiveDateTime;
+    pub const OPERATION_NAME: &str = "GetProductByIdWithReviews";
+    pub const QUERY: & str = "
+            query GetProductByIdWithReviews($getProductByIdId: ID!, $getProductReviewsByIdId: ID!) {
+                \n  getProductById(id: $getProductByIdId) {
+                    \n    
+                    id\n    
+                    name\n    
+                    price\n   
+                    weight\n    
+                    category\n    
+                    createdBy\n   
+                    tags\n    
+                    createdAt\n    
+                    updatedAt\n    
+                    description\n    
+                    imageUrl\n    
+                    getProductReviewsByID(id: $getProductReviewsByIdId) {
+                        \n      
+                        id\n      
+                        body\n      
+                        author {
+                            \n        
+                            id\n        
+                            username\n      
+                        }\n
+                    }
+                    \n      
+                    userRating\n      
+                    media\n      
+                    isEdited\n      
+                    heading\n    
+                    }\n  
+                }\n
+            }
+       ";
+    use serde::{Deserialize, Serialize};
+    #[allow(dead_code)]
+    type Boolean = bool;
+    #[allow(dead_code)]
+    type Float = f64;
+    #[allow(dead_code)]
+    type Int = i32;
+    #[allow(dead_code)]
+    type ID = String;
+    type Date = NaiveDateTime;
+    /// No Variables in getAllUsers
+    #[derive(Serialize)]
+    pub struct Variables { 
+        #[serde(rename = "getProductByIdId")]
+        product_id: String,
+        #[serde(rename = "getProductReviewsByIdId")]
+        product_review_id: String
+    }
+
+    impl Variables {}
+    /// The Response in the Accounts Service
+    #[derive(Deserialize)]
+    pub struct ResponseData { 
+        #[serde(rename = "getProductById")]
+        pub product: ProductQueryByCategory,
+
+        #[serde(rename = "getProductReviewsByID")]
+        pub review: Vec<Reviews>
+    }
+    #[derive(Deserialize)]
+    pub struct ProductQueryByCategory { 
+        pub id: ID, 
+        pub name: String,
+        pub price: Option<i32>, 
+        pub weight: Option<Int>,
+        pub category: Option<String>, 
+        pub created_by: Option<Int>,
+        pub tags: Option<String>,
+        pub created_at: Option<Date>,
+        pub updated_at: Option<Date>,
+        pub description: Option<String>,
+        pub image_url: Option<String>
+    }
+    #[derive(Deserialize)]
+    pub struct Reviews {    
+        pub id: ID, 
+        pub body: String, 
+        pub author: Author,
+        pub user_rating: i32, 
+        pub media: String, 
+        pub is_edited: bool,
+        pub heading: String 
+    }   
+    #[derive(Deserialize)]
+    pub struct Author { 
+        pub id: ID, 
+        pub username: String
+    }
+
+
+}
+impl graphql_client::GraphQLQuery for GetProductByIdWithReviews { 
+    type Variables = product_query_with_reviews::Variables;
+    type ResponseData = product_query_with_reviews::ResponseData;
+    fn build_query(variables: Self::Variables) -> graphql_client::QueryBody<Self::Variables> {
+        use product_query_with_reviews::*;
+        graphql_client::QueryBody { 
+            variables,
+            query:  QUERY,
+            operation_name: OPERATION_NAME
+        }
+    }
+}
