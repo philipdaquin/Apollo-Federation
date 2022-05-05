@@ -82,4 +82,87 @@
 
 .product-detail-description-content  {
     text-align: justify;
+    line-height: 26px;
+    font-size: 16px;
+    height: 600px;
+    overflow-y: hidden;
+    position: relative;
+}
+
+.product-detail-description-content.active { 
+    height: max-content;
+}
+
+.btn-view-description { 
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.user-rate { 
+    margin-bottom: 40px;
+
+}
+
+
+.box {
+    padding: 20px;
+}
+
+.user-info { 
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 20px;   
+}
+
+.user-avt { 
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+
+.pagination > li > a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    margin-left: 5px;
+    font-size: 20px;
+}
+
+.pagination > li > a.active {
+    background-color: black;
+    color: white;
+}
+
+.pagination > li > a:hover {
+    border: 2px solid black;
+}
+
+.user-name {
+    margin-left: 20px;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.name { 
+    font-weight: 600;
+    text-transform: capitalize;
+    margin-bottom: 10px;
+}
+.user-rate-content { 
+    line-height: 25px;
 }
