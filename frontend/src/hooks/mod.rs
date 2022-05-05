@@ -73,7 +73,7 @@ pub struct GraphQLResponse<T> {
 }
 
 pub async fn build_request(request_json: &Value) -> Result<Response, Error> {
-    let api_url = option_env!("API_URL").unwrap_or("http://localhost:4000/graphqll");
+    let api_url = option_env!("API_URL").unwrap_or("http://localhost:4000/graphql");
     let response = reqwest::Client::new()
         .post(api_url)
         .json(request_json)

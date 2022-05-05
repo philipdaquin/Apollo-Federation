@@ -366,20 +366,18 @@ pub mod product_query_with_reviews {
     use chrono::NaiveDateTime;
     pub const OPERATION_NAME: &str = "GetReviewsOfAnyProductId";
     pub const QUERY: & str = "
-        query GetReviewsOfAnyProductId($productId: ID!) {\n  
+        query  {\n  
             getReviewsOfAnyProductId(productId: $productId) {\n    
                 id\n    
                 body\n    
-                author {\n      
-                    id\n      
-                    username\n    
-                }\n    
+               
                 heading\n    
                 media\n    
                 isEdited\n    
                 userRating\n  
             }\n
-         } 
+         } \n
+         \n
     ";
     use serde::{Deserialize, Serialize};
     #[allow(dead_code)]
@@ -395,7 +393,7 @@ pub mod product_query_with_reviews {
     #[derive(Serialize)]
     pub struct Variables { 
         #[serde(rename = "productId")]
-        product_id: String,
+        product_id: ID,
     }
 
     impl Variables {}
@@ -409,19 +407,19 @@ pub mod product_query_with_reviews {
     #[derive(Deserialize)]
     pub struct ReviewsOfProduct { 
         pub id: ID, 
-        pub name: String,
-        pub price: Option<i32>, 
-        pub weight: Option<Int>,
-        pub category: Option<String>, 
-        pub created_by: Option<Int>,
-        pub tags: Option<String>,
-        pub created_at: Option<Date>,
-        pub updated_at: Option<Date>,
-        pub description: Option<String>,
-        pub image_url: Option<String>
+        pub body: String,
+        // pub author: Author, 
+        pub heading: Option<String>, 
+        pub media: Option<String>,
+        pub is_edited: Option<bool>,
+        pub user_rating: Option<Int>,
     }
 
-
+    #[derive(Deserialize)]
+    pub struct Author {
+        pub id: ID, 
+        pub username: String
+    }
 }
 impl graphql_client::GraphQLQuery for GetReviewsOfAnyProductId { 
     type Variables = product_query_with_reviews::Variables;
@@ -436,5 +434,3 @@ impl graphql_client::GraphQLQuery for GetReviewsOfAnyProductId {
     }
 }
 
-
-/// ""
