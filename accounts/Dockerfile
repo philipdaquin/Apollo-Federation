@@ -1,19 +1,23 @@
 FROM rust:1.59
+
 ENV CARGO_TERM_COLOR always
-# Update User's system 
-RUN apt-get update && apt-get install -y libpq-dev clang
+# Update User's system, install postgres into users system 
+RUN apt-get update && \
+    apt-get -y upgrade && \
+    apt-get -y install libpq-dev clang
 # Create an empty project for caching dependencies
 RUN USER=root cargo new --bin /accounts/docker-build
-COPY common_utils ./
+COPY /common_utils/ ./accounts/common_utils/
 # Set the Working directory to build
 WORKDIR /accounts/docker-build 
+
 # Copy Cargo.lock to build file
-COPY /.env ./
+COPY ./accounts/.env ./
 COPY /Cargo.lock ./
 # Copy Cargo toml to the build file 
 COPY ./accounts/Cargo.toml ./ 
 # Cache Dependencies 
-COPY ./accounts/ .
+COPY ./accounts/ ./
 RUN cargo install --path . --locked
 
 
