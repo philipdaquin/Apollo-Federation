@@ -4,7 +4,7 @@ use crate::hooks::get_reviews_of_any_product_id::GetReviewsOfAnyProductIdGetRevi
 pub struct Review { 
     pub id: i32, 
     pub body: String,
-    pub author_id: i32, 
+    pub author_id: AuthorData, 
     pub product_id: i32,
     pub heading: Option<String>,
     pub updated_at: Option<NaiveDateTime>,
@@ -17,19 +17,21 @@ pub struct Review {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct AuthorData { 
-    pub id: i32,
-    pub username: String
+    pub id: i32, 
+    pub username: String,
+    pub first_name: String,
+    pub last_name: String
 }
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct ReviewResponseData { 
-    pub id: i32,
+    pub id: i32, 
     pub body: String,
-    // pub author: AuthorData,
-    pub heading: String, 
-    pub media: Option<String>, 
-    pub is_edited: Option<bool>, 
-    pub user_rating: Option<i32>
+    pub heading: Option<String>, 
+    pub media: Option<String>,
+    pub is_edited: Option<bool>,
+    pub user_rating: Option<i64>,
+    pub author: AuthorData
 }
 
 impl From<&GetReviewsOfAnyProductIdGetReviewsOfAnyProductId> for ReviewResponseData { 
@@ -40,17 +42,23 @@ impl From<&GetReviewsOfAnyProductIdGetReviewsOfAnyProductId> for ReviewResponseD
 
             Some(n)
         };
+
+        let author = AuthorData { 
+            id: f.author.id.parse::<i32>().expect(""),
+            username: f.author.username,
+            first_name: f.author.first_name, 
+            last_name: f.author.last_name
+        };
+
+
         Self { 
-            id: f.id.parse::<i32>().expect(""), 
-            body: f.body.clone(),
-            // author: AuthorData { 
-            //     id: f.author.id.parse::<i32>().expect(""),
-            //     username: f.author.username.clone(),
-            // },
-            heading: f.heading.clone(),
-            media: f.media.clone(),
+            id: f.id.parse::<i32>().expect(""),
+            body: f.body,
+            heading: Some(f.heading),
+            media: f.media,
             is_edited: Some(f.is_edited),
-            user_rating: convert(f.user_rating)
+            user_rating: f.user_rating,
+            author
         }
     }
 }

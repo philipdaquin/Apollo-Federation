@@ -31,12 +31,20 @@ pub fn review_list(ReviewProps {product_id}: &ReviewProps) -> Html {
         .map(|f| ReviewResponseData::from(f))
         .collect();
 
+        
+
 
     let review_list = queried_result 
         .iter()
         .map(|f| { 
             let ReviewResponseData { 
-                id, body, heading, media, is_edited, user_rating
+                id, 
+                body, 
+                heading, 
+                media, 
+                is_edited, 
+                user_rating,
+                author
             } = f.clone();
             return html! {
                 <>

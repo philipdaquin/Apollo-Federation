@@ -65,7 +65,7 @@ pub fn product_list(ProductListProps {filter}: &ProductListProps) -> Html {
             return html! { 
                 <>
                     <article class = "sneaker">
-
+                        
                         <Link<AppRoute> to={AppRoute::ProductPage {id: info.id}}>
                             <img src={info.image_url.clone()} class="sneaker__img" alt=""/>
                         </Link<AppRoute>>

@@ -82,13 +82,15 @@ query GetReviewsOfAnyProductId($productId: ID!) {
   getReviewsOfAnyProductId(productId: $productId) {
     id
     body
-    # author {
-    #   id
-    #   username
-    # }
     heading
     media
     isEdited
     userRating
+    author {
+      id
+      username
+      firstName
+      lastName
+    }
   }
 }
