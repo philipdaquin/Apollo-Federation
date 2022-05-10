@@ -6,4 +6,4 @@ pub mod womens;
 pub mod newsletter;
 pub mod product_list;
 pub mod product_review;
-// pub mod review_list;
+pub mod review_list;

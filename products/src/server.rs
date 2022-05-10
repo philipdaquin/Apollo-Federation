@@ -6,16 +6,29 @@ use async_graphql::{
     EmptyMutation, EmptySubscription, Schema,
 };
 use async_graphql_actix_web::{GraphQLRequest, GraphQLResponse};
-use crate::graphql::config::{graphql, graphql_playground, create_schema, run_migrations, configure_service};
+use crate::{graphql::config::{graphql, graphql_playground, create_schema, run_migrations, configure_service}, redis::{RedisDatabase, create_client}};
 use crate::db::{DatabaseKind, establish_connection};
 
 
 pub async fn new_server(port: u32) -> std::io::Result<()> {
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
+    //  PostGreSQL Database Pool
     let db_pool = establish_connection(DatabaseKind::Example);
     run_migrations(&db_pool);
-    let schema = web::Data::new(create_schema(db_pool));
+    //  Create a Redis Client `
+    let redis_client = create_client(RedisDatabase::Example)
+        .await
+        .expect("Unable to create Redis Client Connection");
+    let redis_connection_manager = redis_client
+        .get_tokio_connection_manager()
+        .await
+        .expect("Cannot Create Redis Connection Manager");
+    //  GraphQl Schema
+    let schema = web::Data::new(create_schema(
+        db_pool, 
+        redis_client.clone(), 
+        redis_connection_manager.clone()));
     
     
     log::info!("{}", &schema.sdl());

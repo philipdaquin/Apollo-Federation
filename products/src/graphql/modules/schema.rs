@@ -1,5 +1,6 @@
 use serde::{Serialize, Deserialize};
 use chrono::NaiveDateTime;
+use crate::{redis::{get_post_cache_key, create_connection}, graphql::config::{get_redis_conn_from_ctx, get_redis_conn_manager}};
 
 use super::model::NewProduct;
 use {
@@ -9,12 +10,14 @@ use {
     super::model::Product,
     crate::{graphql::config::get_conn_from_ctx},
 };
+use redis::{aio::ConnectionManager, Value,  AsyncCommands, RedisError};
+
 
 #[derive(Default)]
 pub struct QueryProducts;
 
 ///  The Price Type in our System 
-#[derive(SimpleObject)]
+#[derive(SimpleObject, Serialize, Deserialize, Clone)]
 pub struct ProductType { 
     pub id: ID,
     pub name: String, 
@@ -69,10 +72,38 @@ impl QueryProducts {
     }
     #[graphql(name = "getProductById")]
     pub async fn get_product_by_id(&self, ctx: &Context<'_>, id: ID) -> Option<ProductType> { 
-        find_product_by_id_internal(ctx, id)
+        let cache_key = get_post_cache_key(id.to_string().as_str());
+        let redis_client = get_redis_conn_from_ctx(ctx).await;
+        let mut redis_connection = create_connection(redis_client)
+            .await
+            .expect("Unable to get redis connection");
+
+        let cached_object: Value = redis_connection
+            .get(cache_key.clone())
+            .await
+            .expect("Redis Error on client");
+        match cached_object { 
+            Value::Nil => { 
+                log::info!("Unable to find cache under this product id, accessing Database.. 😂");
+
+                let product = find_product_by_id_internal(ctx, id);
+                let _: () = redis::pipe()
+                    .atomic()
+                    .set(&cache_key, product.clone())
+                    .expire(&cache_key, 60)
+                    .query_async(&mut redis_connection)
+                    .await
+                    .expect("Internal Error Occurred while attempting to cache the object");
+                return product
+            },
+            Value::Data(cache) => { 
+                log::info!("Cache Found Under this product Id! 👌");
+                serde_json::from_slice(&cache).expect("Unable to Deserialize Struct")
+            },
+            _ => { None }
+        }
     }
 
-   
     #[graphql(name = "getShippingEstimate")]
     pub async fn shipping_estimate(&self, ctx: &Context<'_>, id: ID) -> Option<i32> { 
         let ProductType { 
@@ -148,10 +179,7 @@ impl MutateProduct {
         ctx: &Context<'_>, 
         product_id: ID, 
         user_id: ID, 
-        new_input: NewProductInput) -> Option<ProductType> { 
-        let parse = |x: ID| -> i32 { 
-            x.parse::<i32>().expect("Unable to Parse ID")
-        };
+        new_input: NewProductInput) -> FieldResult<ProductType> { 
 
         let new_product_input = NewProductInput { 
             updated_at: chrono::Utc::now().naive_utc().into(), 
@@ -159,17 +187,34 @@ impl MutateProduct {
         };
 
         let product = resolver::update_product(
-            parse(product_id), 
-            parse(user_id), 
+            parse_id(product_id.clone()), 
+            parse_id(user_id), 
             NewProduct::from(&new_product_input), 
             &get_conn_from_ctx(ctx)).expect("");
-        ProductType::from(&product).into()
+
+        // Cache invalidation once updated, this ensures data consistency 
+        let cache_key = get_post_cache_key(product_id.to_string().as_str());
+        get_redis_conn_manager(ctx)
+            .await
+            .del(cache_key)
+            .await?;
+        Ok(ProductType::from(&product).into())
     }
     #[graphql(name = "deleteProduct")]
     async fn delete_product(&self, ctx: &Context<'_>, product_id: ID) -> FieldResult<bool> { 
+        log::info!("Invalidated Cache Key in Deleting Product ID Cache Key");
+        let cache_id = get_post_cache_key(product_id.to_string().as_str());
+        get_redis_conn_manager(ctx)
+            .await
+            .del(cache_id)
+            .await?;
         Ok(resolver::delete_product(product_id.parse()?, &get_conn_from_ctx(ctx)).expect(""))
        
     }
+}
+//  Helper Parser 
+pub fn parse_id(id: ID) -> i32 { 
+    id.parse::<i32>().expect("ParseIntError")
 }
 
 

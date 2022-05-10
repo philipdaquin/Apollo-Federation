@@ -88,9 +88,9 @@ query GetReviewsOfAnyProductId($productId: ID!) {
     userRating
     author {
       id
-      username
       firstName
       lastName
+      username
     }
   }
 }
