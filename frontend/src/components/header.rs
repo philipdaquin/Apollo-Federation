@@ -1,4 +1,7 @@
 use yew::{prelude::*, function_component, html, Html};
+use crate::router::AppRoute;
+use yew_router::prelude::*;
+
 
 #[function_component(HeaderObject)]
 pub fn header_component() -> Html {
@@ -14,7 +17,10 @@ pub fn header_component() -> Html {
                         <span class="home__new">{"New in"}</span>
                         <h1 class="home__title">{"YEEZY BOOST"} <br/> {"SPLY - 350"}</h1>
                         <p class="home__description">{"Explore the new collections of sneakers"}</p>
-                        <a href="#" class="button">{"Explore Now"}</a> // Leads to the product lists 
+                        
+                        <Link<AppRoute> to={AppRoute::FeaturePage} classes="button">
+                            {"Explore Now"}
+                        </Link<AppRoute>>
                     </div>
                 </div>
             </section>

@@ -2,16 +2,16 @@
 pub mod home;
 pub mod featurepage;
 pub mod product_detail;
-
+pub mod profile_page;
 use crate::router::{
     home::Home, 
     featurepage::FeaturePage,
-    product_detail::ProductDetail
+    product_detail::ProductDetail,
+    profile_page::ProfilePage,
 
 };
 use yew_router::prelude::*;
 use yew::prelude::*;
-
 
 #[derive(Routable, PartialEq, Clone, Debug)]
 pub enum AppRoute { 
@@ -23,6 +23,12 @@ pub enum AppRoute {
     
     #[at("/product/:id")]
     ProductPage { id:  i32 },
+
+    #[at("/profile/:id?/:username")]
+    ProfilePage { 
+        id: i32, 
+        username: String,
+    }
     
 }
 
@@ -30,6 +36,11 @@ pub fn switch(routes: &AppRoute) -> Html {
      match routes { 
         AppRoute::Home => html! { <Home/>},
         AppRoute::FeaturePage => html! { <FeaturePage/>},
-        AppRoute::ProductPage { id } => html! { <ProductDetail id={*id}/>}
+        AppRoute::ProductPage { id } => html! { <ProductDetail id={*id}/>},
+        AppRoute::ProfilePage { 
+            id, 
+            username
+        } => html! { <ProfilePage id={*id} username={username.clone()} />}
+        
     }
 }
