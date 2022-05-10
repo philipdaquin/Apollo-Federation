@@ -84,7 +84,7 @@ pub mod product_query {
             \n
         }
         \n
-        \n";
+    \n";
     use serde::{Deserialize, Serialize};
     #[allow(dead_code)]
     type Boolean = bool;
@@ -369,23 +369,23 @@ pub mod product_query_with_reviews {
     use chrono::NaiveDateTime;
     pub const OPERATION_NAME: &str = "GetReviewsOfAnyProductId";
     pub const QUERY: & str = "
-        query  GetReviewsOfAnyProductId {\n  
+        query GetReviewsOfAnyProductId($productId: ID!) {\n  
             getReviewsOfAnyProductId(productId: $productId) {\n    
-                id\n
-                body\n
-                heading\n
-                media\n
-                isEdited\n
-                userRating\n
-                author {\n
-                    id\n
-                    username\n
-                    firstName\n
-                    lastName\n
-                }\n
+                id\n    
+                body\n    
+                heading\n    
+                media\n    
+                isEdited\n    
+                userRating\n    
+                author {\n      
+                    id\n      
+                    firstName\n      
+                    lastName\n      
+                    username\n    
+                }\n  
             }\n
-         } \n
-         \n
+        }
+      
     ";
     use serde::{Deserialize, Serialize};
     #[allow(dead_code)]
@@ -396,7 +396,6 @@ pub mod product_query_with_reviews {
     type Int = i32;
     #[allow(dead_code)]
     type ID = String;
-    type Date = NaiveDateTime;
     /// No Variables in getAllUsers
     #[derive(Serialize)]
     pub struct Variables { 
@@ -416,21 +415,21 @@ pub mod product_query_with_reviews {
     pub struct ReviewsOfProduct { 
         pub id: ID, 
         pub body: String,
-        pub heading: Option<String>, 
+        pub author: UserType,
+        pub heading: String, 
         pub media: Option<String>,
         pub is_edited: Option<bool>,
         pub user_rating: Option<Int>,
-        pub author: Author
     }
-
     #[derive(Deserialize)]
-    pub struct Author {
-        pub id: ID, 
-        pub username: String,
-        pub first_name: String,
-        pub last_name: String
-
+    pub struct UserType { 
+       pub id: ID, 
+       pub first_name: String, 
+       pub last_name: String,
+       pub username: String 
     }
+
+
 }
 impl graphql_client::GraphQLQuery for GetReviewsOfAnyProductId { 
     type Variables = product_query_with_reviews::Variables;
@@ -444,4 +443,5 @@ impl graphql_client::GraphQLQuery for GetReviewsOfAnyProductId {
         }
     }
 }
+
 

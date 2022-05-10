@@ -1,6 +1,12 @@
 use chrono::NaiveDateTime;
-use crate::hooks::get_all_products::GetAllProductsGetAllProducts;
+use crate::hooks::get_all_products::{GetAllProductsGetAllProducts, self};
 use crate::hooks::get_product_by_id::GetProductByIdGetProductById;
+use crate::{
+    hooks::{get_product_by_id, GetProductById, use_query, GetAllProducts},
+};
+use yew::prelude::*;
+
+
 #[derive(Clone, Debug, PartialEq)]
 pub struct Product { 
     pub id: i32, 
@@ -58,7 +64,6 @@ pub struct ProductID {
     pub image_url: Option<String>
 }
 
-
 impl From<&GetProductByIdGetProductById> for ProductID { 
     fn from(f: &GetProductByIdGetProductById) -> Self {
 
@@ -79,6 +84,25 @@ impl From<&GetProductByIdGetProductById> for ProductID {
             updated_at: f.updated_at.clone(),
             description: f.description.clone(),
             image_url: f.image_url.clone()
+        }
+    }
+}
+
+
+impl From<&ProductID> for Product { 
+    fn from(k: &ProductID) -> Self {
+        Self { 
+            id :k.id.clone(), 
+            name :k.name.clone(), 
+            price :k.price.clone(), 
+            weight :k.weight.clone(), 
+            category:k.category.clone(),
+            created_by:k.created_by.clone(),
+            tags :k.tags.clone(), 
+            created_at :k.created_at.clone(), 
+            updated_at:k.updated_at.clone(),
+            description:k.description.clone(), 
+            image_url:k.image_url.clone()    
         }
     }
 }

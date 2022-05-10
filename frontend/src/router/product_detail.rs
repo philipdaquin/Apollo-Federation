@@ -45,17 +45,50 @@ pub fn product_detail(ProductProps {id}: &ProductProps ) -> Html {
         updated_at,
         description,
         image_url
-    } = ProductID::from(&queries_result);
+    } = ProductID::from(&queries_result).clone();
 
     let on_click = { 
         // add class product-img > img 
     };
 
+    let updated_time = if updated_at.is_some() { 
+        html! {
+            <p>{
+                updated_at.unwrap().format("%B %e, %Y")
+            }</p>
+        } 
+    } else { 
+        html! {} 
+    };
 
     html! {
         <>
             <section class="bd-grid">
                 <div class="container">
+
+                    <div class="box">
+                        <h2>{name}</h2>
+                        <h3>{price.unwrap_or(0)}</h3>
+                        <h3>{weight.unwrap_or(0)}</h3>
+                        <h3>{created_by.unwrap_or(0)}</h3>
+                        <p>{tags.unwrap()}</p>
+                        <h4>{category.unwrap()}</h4>
+                        <p>{created_at.unwrap().format("%B %e, %Y")}</p>
+                        <p>{updated_time}</p>
+                        <p>{description.unwrap()}</p>
+                        <img src={image_url.unwrap()} alt=""/>
+                    </div>
+
+                    //  Insert Product Reviews 
+                    <ReviewList product_id={id}/>
+
+
+                   
+
+
+
+
+
                     // <div class="box">
                     //     <div class="breadcumb">
                     //         <a href="">{"Home"}</a>
@@ -66,41 +99,47 @@ pub fn product_detail(ProductProps {id}: &ProductProps ) -> Html {
                     //         <span><i class="bx bxs-chevrons-right"></i></span>
                     //     </div>
                     // </div>
-                    <div class="row product-row">
+                    // <div class="row product-row">
                         
-                        <div class="col-7 col-md-12">
+                    //     <div class="col-7 col-md-12">
                             
-                                <div class="box">
-                                    <div class="box-header">
-                                        {"Review"}
-                                    </div>
-                                    <ReviewList product_id={id} />
-                                    <div>
-                                        <div class="box">
-                                            <ul class="pagination">
-                                                <li><a href="#"><i class="bx bxs-chevron-left"></i></a></li>
-                                                <li><a href="#" class="active">{"1"}</a></li>
-                                                <li><a href="#">{"2"}</a></li>
-                                                <li><a href="#">{"3"}</a></li>
-                                                <li><a href="#">{"4"}</a></li>
-                                                <li><a href="#">{"5"}</a></li>
-                                                <li><a href="#"><i class="bx bxs-chevron-right"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="box">
-                                    <div class="box-header">
-                                        {"Related Products"}
-                                    </div>
-                                    <div class="row"></div>
-                                </div>
-                            </div>
+                    //             <div class="box">
+                    //                 <div class="box-header">
+                    //                     {"Review"}
+                    //                 </div>
+                    //                 // <ReviewList product_id={id} />
+                    //                 <div>
+                    //                     <div class="box">
+                    //                         <ul class="pagination">
+                    //                             <li><a href="#"><i class="bx bxs-chevron-left"></i></a></li>
+                    //                             <li><a href="#" class="active">{"1"}</a></li>
+                    //                             <li><a href="#">{"2"}</a></li>
+                    //                             <li><a href="#">{"3"}</a></li>
+                    //                             <li><a href="#">{"4"}</a></li>
+                    //                             <li><a href="#">{"5"}</a></li>
+                    //                             <li><a href="#"><i class="bx bxs-chevron-right"></i></a></li>
+                    //                         </ul>
+                    //                     </div>
+                    //                 </div>
+                    //             </div>
+                    //             <div class="box">
+                    //                 <div class="box-header">
+                    //                     {"Related Products"}
+                    //                 </div>
+                    //                 <div class="row"></div>
+                    //             </div>
+                    //         </div>
                        
-                    </div>                
+                    // </div>                
                 </div>
             </section>
         </>
     }
 }
 
+fn render_check<T>(item: Option<T>) -> bool { 
+    match item { 
+        Some(_) => return false,
+        _ => return true
+    }
+}
