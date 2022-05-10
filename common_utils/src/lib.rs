@@ -5,7 +5,7 @@ extern crate lazy_static;
 extern crate thiserror;
 
 
-pub mod error_extension;
+pub mod error;
 
 use std::{env::var, str::FromStr};
 use actix_web::{HttpResponse, HttpRequest};

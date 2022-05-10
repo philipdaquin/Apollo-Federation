@@ -33,7 +33,6 @@ pub fn product_list(ProductListProps {filter}: &ProductListProps) -> Html {
             </>
         }
     }
-    use super::product_list::ProductListFilter;
     let mut queried_results: Vec<Product> = get_all_products
         .data
         .unwrap()
