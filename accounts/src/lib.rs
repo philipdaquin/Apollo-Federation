@@ -12,4 +12,3 @@ pub mod graphql;
 pub mod server;
 pub mod db;
 pub mod schema;
-pub mod error;

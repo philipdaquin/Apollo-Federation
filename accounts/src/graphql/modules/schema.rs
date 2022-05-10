@@ -39,6 +39,7 @@ impl UserQuery {
             .map(UserType::from)
             .collect()
     }
+    #[graphql(name = "getUserByUserId")]
     pub async fn get_user_by_id(&self, ctx: &Context<'_>, id: ID) -> Option<UserType> { 
         let cache_key = get_post_cache_key(id.to_string().as_str());
         let redis_client = get_redis_conn_from_ctx(ctx).await;

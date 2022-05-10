@@ -6,7 +6,8 @@ use async_graphql::{
     EmptyMutation, EmptySubscription, Schema,
 };
 use async_graphql_actix_web::{GraphQLRequest, GraphQLResponse};
-use crate::{graphql::config::{graphql, graphql_playground, create_schema, run_migrations, configure_service}, redis::{start_pubsub, create_client, RedisDatabase}};
+use crate::{graphql::config::{graphql, graphql_playground, create_schema, run_migrations, configure_service}, 
+redis::{start_pubsub, create_client, RedisDatabase}};
 use crate::db::{DatabaseKind, establish_connection};
 
 

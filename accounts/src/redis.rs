@@ -5,7 +5,7 @@ use actix_web_lab::__reexports::tokio;
 use redis::aio::ConnectionManager;
 use redis::{Client, RedisError, ToRedisArgs, RedisResult, aio::Connection};
 use crate::graphql::modules::schema::UserType;
-use super::error::ServiceError;
+use common_utils::error::ServiceError;
 use std::env;
 use lazy_static::lazy_static;
 
