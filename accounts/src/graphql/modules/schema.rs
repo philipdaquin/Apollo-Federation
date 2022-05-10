@@ -3,18 +3,20 @@ use std::str::FromStr;
 use async_graphql::*;
 use async_graphql_actix_web::*;
 use chrono::{NaiveDateTime, DateTime, Utc};
+use redis::{aio::ConnectionManager, Value,  AsyncCommands, RedisError};
+use serde::{Serialize, Deserialize};
 use super::{resolver::{get_user_by_id, get_all_users, self}, 
     model::{User, NewUser, Role}
 };
 use common_utils::{Role as AuthenticationRole};
-use crate::graphql::utils::RoleGuard;
+use crate::{graphql::{utils::RoleGuard, config::{get_redis_conn_manager, get_redis_conn_from_ctx}}, redis::{get_post_cache_key, create_connection}};
 use async_graphql::Guard;
 use crate::graphql::{config::get_conn_from_ctx, utils::verify_password};
 use common_utils::*;
 use jsonwebtoken;
 use crate::graphql::utils::*;
 
-#[derive(SimpleObject)]
+#[derive(SimpleObject, Serialize, Deserialize, Clone)]
 pub struct UserType { 
     pub id: ID,
     pub first_name: String,
@@ -38,7 +40,34 @@ impl UserQuery {
             .collect()
     }
     pub async fn get_user_by_id(&self, ctx: &Context<'_>, id: ID) -> Option<UserType> { 
-        find_user_internally(ctx, id)
+        let cache_key = get_post_cache_key(id.to_string().as_str());
+        let redis_client = get_redis_conn_from_ctx(ctx).await;
+        let mut redis_connection = create_connection(redis_client)
+            .await
+            .expect("Unable to create Redis DB connection");
+        let cached_object = redis_connection.get(cache_key.clone()).await.expect("Redis Error on Client ");
+        
+            //  Check If Cache Object is available 
+        match cached_object { 
+            Value::Nil => { 
+                log::info!("Unable to find cache under this id, accessing Database.. 😂");
+
+                let user = find_user_internally(ctx, id);
+                let _: () = redis::pipe()
+                    .atomic()
+                    .set(&cache_key, user.clone())
+                    .expire(&cache_key, 60)
+                    .query_async(&mut redis_connection)
+                    .await
+                    .expect("Internal Error Occurred while attempting to cache the object");
+                return user
+            },
+            Value::Data(cache) => { 
+                log::info!("Cache Found Under this Id! 👌");
+                serde_json::from_slice(&cache).expect("Unable to Deserialize Struct")
+            },
+            _ => { None }
+        }
     }
     /// type User @key(fields: "id") { 
     ///     id: ID!
@@ -79,6 +108,21 @@ pub struct UserLogin {
 
 #[Object]
 impl UserMutation { 
+    /// Delete a User using User ID
+    #[graphql(name = "deleteUserInDatabase")]   
+    pub async fn delete_user(&self, ctx: &Context<'_>, user_id: ID) -> FieldResult<bool> { 
+        resolver::delete_user(parse_id(user_id.clone()), &get_conn_from_ctx(ctx))?;
+
+        // Delete Cache under this id
+        let cache_id = get_post_cache_key(user_id.to_string().as_str());
+        get_redis_conn_manager(ctx)
+            .await
+            .del(cache_id)
+            .await?;
+
+        Ok(true)
+    }
+
     #[graphql(name = "registerUser")]
     pub async fn register_user(&self, ctx: &Context<'_>, new_user: NewUserInput) ->  UserType { 
         let user = resolver::create_user(
@@ -88,13 +132,21 @@ impl UserMutation {
     }
     
     #[graphql(name = "updateUserDetails")]
-    pub async fn update_user(&self, ctx: &Context<'_>, new_user: NewUserInput, id: ID) -> UserType { 
+    pub async fn update_user(&self, ctx: &Context<'_>, new_user: NewUserInput, id: ID) -> FieldResult<UserType> { 
         let updated_user = resolver::update_user_details(
-            id.parse::<i32>().expect(""), 
+            parse_id(id.clone()), 
             NewUser::from(&new_user), 
             &get_conn_from_ctx(ctx)
-        ).expect("");
-        UserType::from(&updated_user)
+        ).expect("Panic at Updating the User Details");
+
+        //  Delete the cache under this value 
+        let cache_key = get_post_cache_key(id.to_string().as_str());
+        let _: () = get_redis_conn_manager(ctx)
+            .await
+            .del(cache_key)
+            .await?;
+
+        Ok(UserType::from(&updated_user))
     } 
 
     #[graphql(name = "loginUser")]
@@ -116,39 +168,6 @@ impl UserMutation {
     }
 }
 
-/// Diesel Type into Graphql typ e
-impl From<&User> for UserType { 
-    fn from(user: &User) -> Self {
-        Self { 
-            id: user.id.into(),
-            first_name: user.first_name.clone(),
-            last_name: user.last_name.clone(),
-            username: user.username.clone(),
-            password: user.password.clone(),
-            email: user.email.clone(),
-            joined_at: user.joined_at,
-            role: Role::from_str(user.role.as_str())
-                .expect("")
-                .to_string()
-        }
-    }
-}
-
-/// Convert Graphql Type into Reading Database Type 
-impl From<&NewUserInput> for NewUser { 
-    fn from(f: &NewUserInput) -> Self {
-        Self { 
-            first_name: f.first_name.clone(),
-            last_name: f.last_name.clone(), 
-            username: f.username.clone(),
-            password: hash_password(f.password.as_str())
-                .expect("Can't get the hash for password"), 
-            email: f.email.clone(),
-            role: f.role.to_string()
-        }
-    }
-}
-
 #[async_trait::async_trait]
 impl Guard for RoleGuard  {
     async fn check(&self, ctx: &Context<'_>) -> Result<()> { 
@@ -164,4 +183,8 @@ impl Guard for RoleGuard  {
             }
         }
     }
+}
+//  Helper Parser 
+pub fn parse_id(id: ID) -> i32 { 
+    id.parse::<i32>().expect("ParseIntError")
 }

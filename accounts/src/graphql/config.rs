@@ -1,4 +1,6 @@
 
+use std::sync::Arc;
+
 use actix_cors::Cors;
 use actix_web::{get, middleware::Logger, route, web, App, HttpServer, Responder, HttpResponse, HttpRequest, guard};
 use actix_web_lab::respond::Html;
@@ -11,6 +13,10 @@ use crate::db::{DbPool, DbPooledConnection};
 use super::root_schema::{Mutation, Query, AppSchema, AppSchemaBuilder};
 use diesel::{result::Error as DbError, QueryDsl};
 use diesel_migrations::{MigrationError, embed_migrations};
+use redis::{aio::ConnectionManager as RedisManager, 
+        Client as RedisClient, aio::Connection as RedisConnection};
+
+
 
 pub fn configure_service(cfg: &mut web::ServiceConfig) { 
     cfg
@@ -48,12 +54,22 @@ pub async fn index_ws(
 
 embed_migrations!();
 
-pub fn create_schema(pool: DbPool) -> AppSchema { 
-    Schema::build(
-        Query::default(), 
-        Mutation::default(), 
-        EmptySubscription
+pub fn create_schema(
+    pool: DbPool,
+    redis_pool: RedisClient, 
+    redis_connection: RedisManager
+) -> AppSchema { 
+    // Caching Service 
+    let arc_redis_connection = Arc::new(redis_connection);
+
+    Schema::build(Query::default(), Mutation::default(), EmptySubscription
     )
+    .enable_federation()
+    .data(arc_redis_connection)
+    // Add a global data that can be accessed in the Schema
+    //  Redis Caching Client  
+    .data(redis_pool)
+    //  SQL Database Pool
     // Add a global data that can be accessed in the Schema
     .data(pool)
     .extension(ApolloTracing)
@@ -63,9 +79,22 @@ pub fn run_migrations(pool: &DbPool) {
     let conn = pool.get().expect("Database Connection Pool - Migrations error!");
     embedded_migrations::run(&conn).expect("Failed to run database migrations");
 }
+/// Access DBPool from Context
 pub fn get_conn_from_ctx(ctx: &Context<'_>) -> DbPooledConnection { 
     ctx.data::<DbPool>()
         .expect("Failed to get Db Pool")
         .get()
         .expect("Failed to Connect to Database")
+}
+/// Access Redis from the Context, use 'create_connection' to establish connection asynchronously
+pub async fn get_redis_conn_from_ctx(ctx: &Context<'_>) -> RedisClient { 
+    ctx.data::<RedisClient>()
+        .expect("Failed to get Redis Client")
+        .clone()
+}
+/// Access Redis Database Connection
+pub async fn get_redis_conn_manager(ctx: &Context<'_>) -> RedisManager { 
+    ctx.data::<RedisManager>()
+        .expect("Failed to get Redis Connection Manager")
+        .clone()
 }
