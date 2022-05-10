@@ -32,7 +32,6 @@ pub fn product_detail(ProductProps {id}: &ProductProps ) -> Html {
         .unwrap()
         .get_product_by_id
         .unwrap();
-
     let ProductID {
         id, 
         name, 
@@ -47,10 +46,6 @@ pub fn product_detail(ProductProps {id}: &ProductProps ) -> Html {
         image_url
     } = ProductID::from(&queries_result).clone();
 
-    let on_click = { 
-        // add class product-img > img 
-    };
-
     let updated_time = if updated_at.is_some() { 
         html! {
             <p>{
@@ -64,73 +59,78 @@ pub fn product_detail(ProductProps {id}: &ProductProps ) -> Html {
     html! {
         <>
             <section class="bd-grid">
-                <div class="container">
+                <div class="small-container single-product">
+                    <div class="row">
+                        <div class="col-2">
+                            <img
+                                width="100%" 
+                                src="https://i.ytimg.com/vi/kgUDbvKYbWk/maxresdefault.jpg" 
+                                alt=""
+                                id="product-img"
+                            />
+                            <div class="small-img-row">
+                                <div class="small-img-col">
+                                    <img 
+                                        width="100%"
+                                        src="https://www.thewrap.com/wp-content/uploads/2017/12/Screen-Shot-2017-12-04-at-8.52.42-AM.png" 
+                                        alt=""
+                                        class="small-img"
+                                    />
+                                </div>
+                                <div class="small-img-col">
+                                    <img 
+                                        width="100%"
+                                        src="https://www.thewrap.com/wp-content/uploads/2017/12/Screen-Shot-2017-12-04-at-8.52.42-AM.png" 
+                                        alt=""
+                                        class="small-img"
+                                    />
+                                </div>
+                                <div class="small-img-col">
+                                    <img 
+                                        width="100%"
+                                        src="https://www.thewrap.com/wp-content/uploads/2017/12/Screen-Shot-2017-12-04-at-8.52.42-AM.png" 
+                                        alt=""
+                                        class="small-img"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <p>{format!("/product/{}-{}", name.clone(), id.clone())}</p>
+                            <h1>{name}</h1>
+                            <h4>{format!("${} USD", price.unwrap_or(0))}</h4>
+                            <select>
+                                <option>{"Select Size"}</option>
+                                <option>{"XXL"}</option>
+                                <option>{"XL"}</option>
+                                <option>{"Large"}</option>
+                                <option>{"Medium"}</option>
+                                <option>{"Small"}</option>
+                            </select>
+                            <input type="number" value="1" />
+                            <button class="button">{"Add to Cart"}</button>
 
+                            <h3>{"Product Details"}</h3>
+                            <br/>
+                            <p>{format!("{}", description.expect("Unable to get product description"))}</p>
+                        </div>
+                    </div>
+                 
                     <div class="box">
-                        <h2>{name}</h2>
-                        <h3>{price.unwrap_or(0)}</h3>
                         <h3>{weight.unwrap_or(0)}</h3>
                         <h3>{created_by.unwrap_or(0)}</h3>
                         <p>{tags.unwrap()}</p>
                         <h4>{category.unwrap()}</h4>
                         <p>{created_at.unwrap().format("%B %e, %Y")}</p>
                         <p>{updated_time}</p>
-                        <p>{description.unwrap()}</p>
                         <img src={image_url.unwrap()} alt=""/>
                     </div>
 
                     //  Insert Product Reviews 
                     <ReviewList product_id={id}/>
 
-
-                   
-
-
-
-
-
-                    // <div class="box">
-                    //     <div class="breadcumb">
-                    //         <a href="">{"Home"}</a>
-                    //         <span><i class="bx bxs-chevrons-right"></i></span>
-                    //         <a href="">{"All Products"}</a>
-                    //         <span><i class="bx bxs-chevrons-right"></i></span>
-                    //         <a href="">{"Nike Shoes"}</a>
-                    //         <span><i class="bx bxs-chevrons-right"></i></span>
-                    //     </div>
-                    // </div>
-                    // <div class="row product-row">
-                        
-                    //     <div class="col-7 col-md-12">
-                            
-                    //             <div class="box">
-                    //                 <div class="box-header">
-                    //                     {"Review"}
-                    //                 </div>
-                    //                 // <ReviewList product_id={id} />
-                    //                 <div>
-                    //                     <div class="box">
-                    //                         <ul class="pagination">
-                    //                             <li><a href="#"><i class="bx bxs-chevron-left"></i></a></li>
-                    //                             <li><a href="#" class="active">{"1"}</a></li>
-                    //                             <li><a href="#">{"2"}</a></li>
-                    //                             <li><a href="#">{"3"}</a></li>
-                    //                             <li><a href="#">{"4"}</a></li>
-                    //                             <li><a href="#">{"5"}</a></li>
-                    //                             <li><a href="#"><i class="bx bxs-chevron-right"></i></a></li>
-                    //                         </ul>
-                    //                     </div>
-                    //                 </div>
-                    //             </div>
-                    //             <div class="box">
-                    //                 <div class="box-header">
-                    //                     {"Related Products"}
-                    //                 </div>
-                    //                 <div class="row"></div>
-                    //             </div>
-                    //         </div>
-                       
-                    // </div>                
+                    // Related Products 
+                               
                 </div>
             </section>
         </>

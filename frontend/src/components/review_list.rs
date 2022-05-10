@@ -33,6 +33,7 @@ pub fn review_list(ReviewProps {product_id}: &ReviewProps) -> Html {
         .map(|f| ReviewResponseData::from(f))
         .collect();
 
+    let count = queried_result.len();
 
     let review_list = queried_result 
         .iter()
@@ -53,14 +54,12 @@ pub fn review_list(ReviewProps {product_id}: &ReviewProps) -> Html {
                 firstname,
                 lastname
             } = author.clone();
-
-
             return html! {
                 <>
                     <div>
                         <div>
                             <div>
-                                <h1>{heading.expect("")}</h1>
+                                <h1>{heading.expect("Unable to get the header for User Comment")}</h1>
                             </div>
                             <h1>{author.id}</h1>
                             <h2>{username}</h2>
@@ -69,7 +68,6 @@ pub fn review_list(ReviewProps {product_id}: &ReviewProps) -> Html {
                         <p>{format!(" User Rating {}", user_rating.unwrap_or(0))}</p>
                         <p>{body}</p>
                     </div>    
-                          
                 </> 
             }
         }).collect::<Vec<Html>>();
@@ -77,7 +75,10 @@ pub fn review_list(ReviewProps {product_id}: &ReviewProps) -> Html {
     
     html! {
         <>
-            {review_list}
+            <div>
+                <h3>{format!("Reviews {}", count)}</h3>
+                {review_list}
+            </div>
         </>
     }
 }

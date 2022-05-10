@@ -36,12 +36,6 @@ pub struct ReviewResponseData {
 
 impl From<&GetReviewsOfAnyProductIdGetReviewsOfAnyProductId> for ReviewResponseData { 
     fn from(f: &GetReviewsOfAnyProductIdGetReviewsOfAnyProductId) -> Self {
-
-        let convert = |n: Option<i64> | -> Option<i32> { 
-            let n =  n.unwrap() as i32;
-
-            Some(n)
-        };
         Self { 
             id: f.id.parse::<i32>().expect(""),
             body: f.body.clone(),
