@@ -20,7 +20,7 @@ pub fn navbar() -> Html {
                             <li class="nav__item"><Link<AppRoute> to={AppRoute::FeaturePage} classes={"nav__link"}>{"Featured"}</Link<AppRoute>></li>
                             <li class="nav__item"><Link<AppRoute> to={AppRoute::FeaturePage} classes={"nav__link"}>{"Women"}</Link<AppRoute>></li>
                             <li class="nav__item"><Link<AppRoute> to={AppRoute::FeaturePage} classes={"nav__link"}>{"New"}</Link<AppRoute>></li>
-                            <li class="nav__item"><Link<AppRoute> to={AppRoute::FeaturePage} classes={"nav__link"}>{"Shop"}</Link<AppRoute>></li>
+                            <li class="nav__item"><Link<AppRoute> to={AppRoute::Developer} classes={"nav__link"}>{"Shop"}</Link<AppRoute>></li>
                         </ul>
                     </div>
                     <div class="nav__shop">

@@ -42,8 +42,6 @@ pub struct GetProductById;
 )]
 pub struct GetProductsByCategory;
 
-
-
 ////
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -52,9 +50,6 @@ pub struct GetProductsByCategory;
     response_derives = "Clone, PartialEq")]
 pub struct GetProductsByTags;
 
-
-
-
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "src/graphql/schema.graphql",
@@ -62,6 +57,12 @@ pub struct GetProductsByTags;
     response_derives = "Clone, PartialEq")]
 pub struct GetReviewsOfAnyProductId;
 
+
+#[derive(GraphQLQuery)]
+#[graphql(schema_path = "src/graphql/schema.graphql", 
+    query_path = "src/graphql/mutation.graphql", 
+    response_derives = "Clone, PartialEq")]
+pub struct RegisterUser;
 
 
 

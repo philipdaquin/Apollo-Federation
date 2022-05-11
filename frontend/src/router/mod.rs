@@ -3,12 +3,14 @@ pub mod home;
 pub mod featurepage;
 pub mod product_detail;
 pub mod profile_page;
+pub mod dev_product;
+
 use crate::router::{
     home::Home, 
     featurepage::FeaturePage,
     product_detail::ProductDetail,
     profile_page::ProfilePage,
-
+    dev_product::CreateProduct
 };
 use yew_router::prelude::*;
 use yew::prelude::*;
@@ -28,7 +30,9 @@ pub enum AppRoute {
     ProfilePage { 
         id: i32, 
         username: String,
-    }
+    },
+    #[at("/developer")]
+    Developer
     
 }
 
@@ -40,7 +44,8 @@ pub fn switch(routes: &AppRoute) -> Html {
         AppRoute::ProfilePage { 
             id, 
             username
-        } => html! { <ProfilePage id={*id} username={username.clone()} />}
+        } => html! { <ProfilePage id={*id} username={username.clone()} />},
+        AppRoute::Developer => html! { <CreateProduct/>}
         
     }
 }

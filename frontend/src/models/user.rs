@@ -1,4 +1,5 @@
 use chrono::NaiveDateTime;
+use serde::{Deserialize, Serialize};
 
 use crate::hooks::user_query::UserQueryGetAllUsers;
 
@@ -12,6 +13,17 @@ pub struct UserInfo {
     pub email: String,
     pub joined_at: NaiveDateTime
 }
+
+#[derive(Serialize, Deserialize, Clone, Debug, Default)]
+pub struct NewUserRegister { 
+    pub username: String, 
+    pub first_name: String,
+    pub last_name: String, 
+    pub email: String,
+    pub role: Option<String>
+}
+
+
 
 
 impl From<&UserQueryGetAllUsers> for UserInfo { 
