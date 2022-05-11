@@ -1,0 +1,21 @@
+
+mutation CreateReview($newReview: NewReviewInput!) {
+  createReview(newReview: $newReview) {
+    id
+    body
+    heading
+    media
+    isEdited
+    userRating
+    author {
+      id
+    }
+    product {
+      id
+    }
+  }
+}
+# 
+mutation RegisterUser($newUser: NewUserInput!) {
+  registerUser(newUser: $newUser) 
+}
