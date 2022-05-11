@@ -99,7 +99,7 @@ pub struct NewUserInput {
     pub username: String, 
     pub password: String,
     pub email: String,
-    pub role: Role
+    pub role: Option<Role>
 }
 #[derive(InputObject)] 
 pub struct UserLogin { 

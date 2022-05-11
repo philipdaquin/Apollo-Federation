@@ -53,8 +53,7 @@ impl From<&User> for UserType {
             email: user.email.clone(),
             joined_at: user.joined_at,
             role: Role::from_str(user.role.as_str())
-                .expect("")
-                .to_string()
+                .unwrap_or(Role::User).to_string()
         }
     }
 }
@@ -68,7 +67,7 @@ impl From<&NewUserInput> for NewUser {
             password: hash_password(f.password.as_str())
                 .expect("Can't get the hash for password"), 
             email: f.email.clone(),
-            role: f.role.to_string()
+            role: f.role.unwrap_or(Role::User).to_string()
         }
     }
 }
