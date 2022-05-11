@@ -70,8 +70,8 @@ pub fn product_detail(ProductProps {id}: &ProductProps ) -> Html {
 
     html! {
         <>
-            <section class="bd-grid">
-                <div class="bg-main">
+            <section class="featured section bd-grid">
+                <div class="bg-main ">
                     <div class="box">
                         <div class="breadcumb">
                             <Link<AppRoute> to={AppRoute::Home}>{"Home"}</Link<AppRoute>> 

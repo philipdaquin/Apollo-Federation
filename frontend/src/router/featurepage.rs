@@ -4,8 +4,6 @@ use crate::components::product_list::{Productlist, ProductListFilter};
 pub fn feature_page() -> Html {
     html! {
         <>
-
-
             <section class="featured section" id="shop">
                 <h2 class="section-title">{"All Products"}</h2>
                 <div class="featured__container bd-grid">
