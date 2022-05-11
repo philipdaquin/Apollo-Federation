@@ -59,8 +59,8 @@
     width: 30px;
     background-color: gray;
     display: grid;
+    border-radius: 50%;
     place-items: center;
-    cursor: pointer;
 }
 .product-quantity-btn i  { 
     font-size: 20px;

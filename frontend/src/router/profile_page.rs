@@ -1,6 +1,5 @@
 use yew::{prelude::*, function_component, html, Html};
 
-
 #[derive(Properties, Debug, Clone, PartialEq)]
 pub struct ProfileProps { 
     #[prop_or_default]

@@ -30,19 +30,27 @@ pub struct ReviewResponseData {
     pub heading: Option<String>, 
     pub media: Option<String>,
     pub is_edited: Option<bool>,
-    pub user_rating: Option<i64>,
+    pub user_rating: Option<usize>,
     pub author: AuthorData
 }
 
 impl From<&GetReviewsOfAnyProductIdGetReviewsOfAnyProductId> for ReviewResponseData { 
     fn from(f: &GetReviewsOfAnyProductIdGetReviewsOfAnyProductId) -> Self {
+
+        let convert = |n: Option<i64>| -> Option<usize> {
+            let j = n.unwrap_or(0) as usize;
+
+            Some(j)
+        };
+
+
         Self { 
             id: f.id.parse::<i32>().expect(""),
             body: f.body.clone(),
             heading: Some(f.heading.clone()),
             media: f.media.clone(),
             is_edited: Some(f.is_edited),
-            user_rating: f.user_rating.clone(),
+            user_rating: convert(f.user_rating.clone()),
             author: AuthorData {  
                 id: f.author.id.parse::<i32>().expect(""),
                 firstname: f.author.first_name.clone(), 

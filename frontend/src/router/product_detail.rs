@@ -4,8 +4,9 @@ use crate::hooks::{
 };
 use crate::models::products::ProductID;
 use crate::components::review_list::ReviewList;
-
-
+use yew_router::prelude::*;
+use crate::router::AppRoute;
+use yew_hooks::use_counter;
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct ProductProps { 
@@ -56,90 +57,88 @@ pub fn product_detail(ProductProps {id}: &ProductProps ) -> Html {
         html! {} 
     };
 
+
+    let quantity = use_counter( 1);
+    let add_quantity = {
+        let quantity = quantity.clone();
+        Callback::from(move |_| quantity.increase())
+    };
+    let decre_quantity = { 
+        let quantity = quantity.clone();
+        Callback::from(move |_| quantity.decrease())
+    };
+
     html! {
         <>
             <section class="bd-grid">
-                <div class="small-container single-product">
-                    <div class="row">
-                        <div class="col-2">
-                            <img
-                                width="100%" 
-                                src="https://i.ytimg.com/vi/kgUDbvKYbWk/maxresdefault.jpg" 
-                                alt=""
-                                id="product-img"
-                            />
-                            <div class="small-img-row">
-                                <div class="small-img-col">
-                                    <img 
-                                        width="100%"
-                                        src="https://www.thewrap.com/wp-content/uploads/2017/12/Screen-Shot-2017-12-04-at-8.52.42-AM.png" 
-                                        alt=""
-                                        class="small-img"
-                                    />
-                                </div>
-                                <div class="small-img-col">
-                                    <img 
-                                        width="100%"
-                                        src="https://www.thewrap.com/wp-content/uploads/2017/12/Screen-Shot-2017-12-04-at-8.52.42-AM.png" 
-                                        alt=""
-                                        class="small-img"
-                                    />
-                                </div>
-                                <div class="small-img-col">
-                                    <img 
-                                        width="100%"
-                                        src="https://www.thewrap.com/wp-content/uploads/2017/12/Screen-Shot-2017-12-04-at-8.52.42-AM.png" 
-                                        alt=""
-                                        class="small-img"
-                                    />
+                <div class="bg-main">
+                    <div class="box">
+                        <div class="breadcumb">
+                            <Link<AppRoute> to={AppRoute::Home}>{"Home"}</Link<AppRoute>> 
+                            <span><i class="bx bxs-chevrons-right"></i></span>
+                            <Link<AppRoute> to={AppRoute::FeaturePage}>{"All Products"}</Link<AppRoute>> 
+                            <span><i class="bx bxs-chevrons-right"></i></span>
+                            <Link<AppRoute> to={AppRoute::ProductPage { id }}>{name.clone().to_ascii_uppercase()}</Link<AppRoute>> 
+                        </div>
+                    </div>
+                    <div class="row product-row">
+                        <div class="col-5 col-md-12">
+                            <div class="product-img">
+                                <img src="https://www.thewrap.com/wp-content/uploads/2017/12/Screen-Shot-2017-12-04-at-8.52.42-AM-618x400.png" alt=""/>
+                            </div>
+                            <div class="box">
+                                <div class="product-img-list">
+                                    <div class="product-img-item">
+                                        <img src="https://www.thewrap.com/wp-content/uploads/2017/12/Screen-Shot-2017-12-04-at-8.52.42-AM-618x400.png" alt=""/>
+                                    </div> 
+                                    <div class="product-img-item">
+                                        <img src="https://www.thewrap.com/wp-content/uploads/2017/12/Screen-Shot-2017-12-04-at-8.52.42-AM-618x400.png" alt=""/>
+                                    </div> 
+                                    <div class="product-img-item">
+                                        <img src="https://www.thewrap.com/wp-content/uploads/2017/12/Screen-Shot-2017-12-04-at-8.52.42-AM-618x400.png" alt=""/>
+                                    </div> 
                                 </div>
                             </div>
                         </div>
-                        <div class="col-2">
-                            <p>{format!("/product/{}-{}", name.clone(), id.clone())}</p>
-                            <h1>{name}</h1>
-                            <h4>{format!("${} USD", price.unwrap_or(0))}</h4>
-                            <select>
-                                <option>{"Select Size"}</option>
-                                <option>{"XXL"}</option>
-                                <option>{"XL"}</option>
-                                <option>{"Large"}</option>
-                                <option>{"Medium"}</option>
-                                <option>{"Small"}</option>
-                            </select>
-                            <input type="number" value="1" />
-                            <button class="button">{"Add to Cart"}</button>
-
-                            <h3>{"Product Details"}</h3>
-                            <br/>
-                            <p>{format!("{}", description.expect("Unable to get product description"))}</p>
+                        <div class="col-7 col-md-12">
+                            <div class="product-info">
+                                <h1>{name}</h1>
+                            </div>
+                            <div class="product-info-detail">
+                                <span class="product-info-detail-title">{format!("Brand:")}</span>
+                                <a href="">{"NIKE"}</a>
+                            </div>
+                            <div class="product-info-detail">
+                                <span class="product-info-detail-title">{"Rated: "}</span>
+                                <span class="rating">
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                    <i class="bx bxs-star"></i>
+                                </span>
+                            </div>
+                            <div class="product-description">
+                                <p>{format!("{}", description.expect("Unable to get product description"))}</p>
+                                <div class="product-info-price">{format!("${}", price.expect("Unable to get the price of product"))}</div>
+                                <div class="product-quantity-wrapper">
+                                    <button class="product-quantity-btn" onclick={decre_quantity}>
+                                        <i class="bx bx-minus"></i>
+                                    </button>
+                                    <span class="product-quantity">{*quantity}</span>
+                                    <button class="product-quantity-btn" onclick={add_quantity}>
+                                        <i class="bx bx-plus"></i>
+                                    </button>
+                                </div>
+                                <button class="btn-flat btn-hover">{"Add to Cart"}</button>
+                            </div>
                         </div>
                     </div>
-                 
-                    <div class="box">
-                        <h3>{weight.unwrap_or(0)}</h3>
-                        <h3>{created_by.unwrap_or(0)}</h3>
-                        <p>{tags.unwrap()}</p>
-                        <h4>{category.unwrap()}</h4>
-                        <p>{created_at.unwrap().format("%B %e, %Y")}</p>
-                        <p>{updated_time}</p>
-                        <img src={image_url.unwrap()} alt=""/>
-                    </div>
-
                     //  Insert Product Reviews 
                     <ReviewList product_id={id}/>
-
                     // Related Products 
-                               
                 </div>
             </section>
         </>
-    }
-}
-
-fn render_check<T>(item: Option<T>) -> bool { 
-    match item { 
-        Some(_) => return false,
-        _ => return true
     }
 }
