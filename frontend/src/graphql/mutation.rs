@@ -7,7 +7,15 @@ pub mod register_user_mutation {
     pub const OPERATION_NAME: &str = "RegisterUser";
     pub const QUERY : & str = "
         mutation RegisterUser($newUser: NewUserInput!) {\n  
-            registerUser(newUser: $newUser) {\n  
+            registerUser(newUser: $newUser) {\n    
+                id\n    
+                firstName\n    
+                lastName\n    
+                username\n    
+                password\n    
+                email\n    
+                joinedAt\n    
+                role\n  
             }\n
         }
     ";
@@ -36,13 +44,26 @@ pub mod register_user_mutation {
     #[derive(Serialize)]
     pub struct Variables {
         #[serde(rename = "newUser")]
-        pub new_character: NewUser,
+        pub new_user: NewUser,
     }
     impl Variables {}
+
+    #[derive(Deserialize)]
+    pub struct ResponseUserData { 
+        pub id: ID, 
+        pub first_name: String,
+        pub last_name: String,
+        pub username: String,
+        pub password: String,
+        pub email: String,
+        pub joined_at: Date,
+        pub role: String
+    }
+
     #[derive(Deserialize)]
     pub struct ResponseData {
         #[serde(rename = "registerUser")]
-        pub new_character: Boolean,
+        pub new_user: ResponseUserData,
     }
 }
 impl graphql_client::GraphQLQuery for RegisterUser {

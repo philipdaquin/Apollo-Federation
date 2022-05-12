@@ -13,16 +13,39 @@ use crate::graphql::mutation::register_user_mutation::NewUser;
 #[function_component(RegisterUserComponent)]
 pub fn register_user_component() -> Html {
 
-
+    let new_username = use_state(|| "".to_string());
+    let new_firstname = use_state(|| "".to_string());
+    let new_lastname = use_state(|| "".to_string());
+    let new_email = use_state(|| "".to_string());
+    let new_password = use_state(|| "".to_string());
+    let new_role = use_state(|| "".to_string());
     let register_info = use_state(NewUserRegister::default);
+    
     let onsubmit = { 
-        let register_info = register_info.clone();
+        let new_username = new_username.clone();
+        let new_firstname = new_firstname.clone();
+        let new_lastname = new_lastname.clone();
+        let new_email = new_email.clone();
+        let new_password = new_password.clone();
+        let new_role = new_role.clone();
+
 
         Callback::from(move |_| { 
-            let register_info = register_info.clone();
-
+            let new_username = new_username.clone();
+            let new_firstname = new_firstname.clone();
+            let new_lastname = new_lastname.clone();
+            let new_email = new_email.clone();
+            let new_password = new_password.clone();
+            let new_role = new_role.clone();
             wasm_bindgen_futures::spawn_local(async move { 
-                let register_info = (*register_info).clone();
+                let register_info = NewUserRegister {
+                    username: (*new_username).clone(), 
+                    first_name: (*new_firstname).clone(), 
+                    last_name: (*new_lastname).clone(), 
+                    email: (*new_email).clone(), 
+                    password: (*new_password).clone(), 
+                    role: (*new_role).clone() 
+                };
                 let variables = NewUser::from(&register_info);
                 let request_body = RegisterUser::build_query(register_user_mutation::Variables { 
                     new_character: variables
@@ -40,60 +63,90 @@ pub fn register_user_component() -> Html {
         })
     };  
 
+    // let oninput_username = {
+    //     let new_username = new_username.clone();
+    //     Callback::from(move |input| new_username.set(input))
+    // };
+    // let oninput_firstname = {
+    //     let new_firstname = new_firstname.clone();
+    //     Callback::from(move |input| new_firstname.set(input))
+    // };
+    // let oninput_lastname = {
+    //     let new_lastname = new_lastname.clone();
+    //     Callback::from(move |input| new_lastname.set(input))
+    // };
+    // let oninput_email = {
+    //     let new_email = new_email.clone();
+    //     Callback::from(move |input| new_email.set(input))
+    // };
+    // let oninput_password = {
+    //     let new_password = new_password.clone();
+    //     Callback::from(move |input| new_password.set(input))
+    // };
+    // let oninput_role = {
+    //     let new_role = new_role.clone();
+    //     Callback::from(move |input| new_role.set(input))
+    // };
+
+
+
     let oninput_username = { 
-        let register_info = register_info.clone();
+        let new_username = new_username.clone();
         Callback::from(move |e: InputEvent| { 
             let input: HtmlInputElement = e.target_unchecked_into();
-            let mut info = (*register_info).clone();
-            info.username = input.value();
-            register_info.set(info)
+            let mut info = (*new_username).clone();
+            info = input.value();
+            new_username.set(info)
         })
     };
     let oninput_firstname = { 
-        let register_info = register_info.clone();
+        let new_firstname = new_firstname.clone();
         Callback::from(move |e: InputEvent| { 
             let input: HtmlInputElement = e.target_unchecked_into();
-            let mut info = (*register_info).clone();
-            info.first_name = input.value();
-            register_info.set(info)
+            let mut info = (*new_firstname).clone();
+            info = input.value();
+            new_firstname.set(info)
         })
     };
     let oninput_lastname = { 
-        let register_info = register_info.clone();
+        let new_lastname = new_lastname.clone();
         Callback::from(move |e: InputEvent| { 
             let input: HtmlInputElement = e.target_unchecked_into();
-            let mut info = (*register_info).clone();
-            info.last_name = input.value();
-            register_info.set(info)
+            let mut info = (*new_lastname).clone();
+            info = input.value();
+            new_lastname.set(info)
         })
     };
     let oninput_email = { 
-        let register_info = register_info.clone();
+        let new_email = new_email.clone();
         Callback::from(move |e: InputEvent| { 
             let input: HtmlInputElement = e.target_unchecked_into();
-            let mut info = (*register_info).clone();
-            info.email = input.value();
-            register_info.set(info)
+            let mut info = (*new_email).clone();
+            info = input.value();
+            new_email.set(info)
         })
     };
     let oninput_password = { 
-        let register_info = register_info.clone();
+        let new_password = new_password.clone();
         Callback::from(move |e: InputEvent| { 
             let input: HtmlInputElement = e.target_unchecked_into();
-            let mut info = (*register_info).clone();
-            info.password = input.value();
-            register_info.set(info)
+            let mut info = (*new_password).clone();
+            info = input.value();
+            new_password.set(info)
         })
     };
     let oninput_role = { 
-        let register_info = register_info.clone();
+        let new_role = new_role.clone();
         Callback::from(move |e: InputEvent| { 
             let input: HtmlInputElement = e.target_unchecked_into();
-            let mut info = (*register_info).clone();
-            info.role = input.value();
-            register_info.set(info)
+            let mut info = (*new_role).clone();
+            info = input.value();
+            new_role.set(info)
         })
     };
+
+
+
 
 
 
@@ -106,37 +159,37 @@ pub fn register_user_component() -> Html {
                     <form {onsubmit} >
                         <fieldset>
                             <input 
-                                value={register_info.username.clone()}
+                                value={(*new_username).clone()}
                                 oninput={oninput_username}
                                 placeholder="Username"
                                 type="text"
                             />
                             <input 
-                                value={register_info.first_name.clone()}
+                                value={(*new_firstname).clone()}
                                 oninput={oninput_firstname}
                                 placeholder="firstname"
                                 type="text"
                             />
                             <input 
-                                value={register_info.last_name.clone()}
+                                value={(*new_lastname).clone()}
                                 oninput={oninput_lastname}
                                 placeholder="lastname"
                                 type="text"
                             />
                             <input 
-                                value={register_info.email.clone()}
+                                value={(*new_email).clone()}
                                 oninput={oninput_email}
                                 placeholder="email"
                                 type="text"
                             />
                             <input 
-                                value={register_info.password.clone()}
+                                value={(*new_password).clone()}
                                 oninput={oninput_password}
                                 placeholder="password"
                                 type="text"
                             />
                             <input 
-                                value={register_info.role.clone()}
+                                value={(*new_role).clone()}
                                 oninput={oninput_role}
                                 placeholder="role"
                                 type="text"
