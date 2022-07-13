@@ -19,7 +19,6 @@ pub fn register_user_component() -> Html {
     let new_email = use_state(|| "".to_string());
     let new_password = use_state(|| "".to_string());
     let new_role = use_state(|| "".to_string());
-    let register_info = use_state(NewUserRegister::default);
     
     let onsubmit = { 
         let new_username = new_username.clone();
@@ -48,7 +47,7 @@ pub fn register_user_component() -> Html {
                 };
                 let variables = NewUser::from(&register_info);
                 let request_body = RegisterUser::build_query(register_user_mutation::Variables { 
-                    new_character: variables
+                    new_user: variables
                 });
                 let request_json = json!(request_body);
                 let request = hooks::build_request(&request_json).await;
